@@ -1,270 +1,244 @@
-<!-- This is the main file for the UI  -->
+<!-- this is the main part of the index pages with the loaded JS adn the Functions too:  -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SmartGap_AI - Ideathon</title>
+<title>SmartGap_AI – AI Learning Gap Detection</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #1a1a1a;
-    --surface: #222222;
-    --surface2: #2a2a2a;
-    --surface3: #323232;
-    --border: #333333;
-    --border2: #404040;
-    --primary: #60a5fa;
-    --accent: #34d399;
-    --warn: #fbbf24;
-    --danger: #f87171;
-    --text: #f0f0f0;
-    --text-muted: #888888;
-    --text-dim: #444444;
-    --font-display: 'Sora', sans-serif;
-    --font-body: 'DM Sans', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
-    --radius: 12px;
-    --radius-lg: 18px;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body { font-family: var(--font-body); background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; line-height: 1.6; }
-  ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: var(--surface); } ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
-  .page { display: none; min-height: 100vh; }
-  .page.active { display: block; animation: fadeIn .3s ease; }
-  @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-  /* NAV */
-  nav { position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:14px 32px; background:rgba(26,26,26,0.92); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); }
-  .nav-logo { font-family:var(--font-display); font-size:1.2rem; font-weight:700; color:var(--text); display:flex; align-items:center; gap:10px; cursor:pointer; }
-  .nav-logo .dot { width:8px; height:8px; background:var(--accent); border-radius:50%; box-shadow:0 0 8px var(--accent); }
-  .nav-actions { display:flex; gap:10px; align-items:center; }
-  .nav-user { display:flex; align-items:center; gap:8px; font-size:.85rem; color:var(--text-muted); }
-  .nav-avatar { width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,var(--primary),var(--accent)); display:flex; align-items:center; justify-content:center; font-size:.75rem; font-weight:700; color:#fff; font-family:var(--font-display); }
-  /* BUTTONS */
-  .btn { display:inline-flex; align-items:center; gap:7px; padding:10px 20px; border-radius:8px; border:none; font-family:var(--font-body); font-size:.875rem; font-weight:500; cursor:pointer; transition:all .2s ease; text-decoration:none; }
-  .btn-primary { background:var(--primary); color:#0d0d0d; font-weight:600; box-shadow:0 0 18px rgba(96,165,250,.2); }
-  .btn-primary:hover { background:#3b82f6; box-shadow:0 0 26px rgba(96,165,250,.35); transform:translateY(-1px); }
-  .btn-accent { background:var(--accent); color:#0d0d0d; font-weight:600; box-shadow:0 0 18px rgba(52,211,153,.18); }
-  .btn-accent:hover { background:#10b981; box-shadow:0 0 26px rgba(52,211,153,.3); transform:translateY(-1px); }
-  .btn-ghost { background:transparent; color:var(--text-muted); border:1px solid var(--border); }
-  .btn-ghost:hover { background:var(--surface2); color:var(--text); border-color:var(--border2); }
-  .btn-sm { padding:7px 14px; font-size:.8rem; }
-  .btn-lg { padding:14px 28px; font-size:1rem; }
-  .btn:disabled { opacity:.45; cursor:not-allowed; transform:none !important; }
-  /* CARDS */
-  .card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:24px; transition:border-color .2s; }
-  .card:hover { border-color:var(--border2); }
-  /* INPUTS */
-  .input-group { display:flex; flex-direction:column; gap:6px; margin-bottom:16px; }
-  .input-group label { font-size:.82rem; color:var(--text-muted); font-weight:500; letter-spacing:.03em; }
-  .input-field { background:var(--surface2); border:1px solid var(--border); color:var(--text); padding:11px 14px; border-radius:8px; font-family:var(--font-body); font-size:.9rem; transition:border-color .2s,box-shadow .2s; outline:none; width:100%; }
-  .input-field:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(96,165,250,.1); }
-  select.input-field option { background:var(--surface2); }
-  /* TAGS */
-  .tag { display:inline-flex; align-items:center; gap:5px; padding:4px 10px; border-radius:20px; font-size:.75rem; font-weight:600; font-family:var(--font-display); }
-  .tag-success { background:rgba(52,211,153,.1); color:var(--accent); border:1px solid rgba(52,211,153,.25); }
-  .tag-danger  { background:rgba(248,113,113,.1); color:var(--danger); border:1px solid rgba(248,113,113,.25); }
-  .tag-warn    { background:rgba(251,191,36,.1);  color:var(--warn);   border:1px solid rgba(251,191,36,.25); }
-  .tag-info    { background:rgba(96,165,250,.1);  color:var(--primary);border:1px solid rgba(96,165,250,.25); }
-  /* PROGRESS */
-  .progress-track { background:var(--surface3); border-radius:99px; overflow:hidden; }
-  .progress-fill  { height:100%; border-radius:99px; transition:width 1s cubic-bezier(.4,0,.2,1); }
-  .progress-blue  { background:linear-gradient(90deg,var(--primary),#818cf8); }
-  .progress-green { background:linear-gradient(90deg,var(--accent),#34d399); }
-  .progress-warn  { background:linear-gradient(90deg,var(--warn),#fb923c); }
-  .progress-danger{ background:linear-gradient(90deg,var(--danger),#f97316); }
-  /* SPINNER */
-  .spinner { width:36px; height:36px; border-radius:50%; border:3px solid var(--border); border-top-color:var(--primary); animation:spin .7s linear infinite; }
-  @keyframes spin { to { transform:rotate(360deg); } }
-  .loading-overlay { display:flex; flex-direction:column; align-items:center; gap:16px; padding:48px; text-align:center; }
-  .loading-overlay p { color:var(--text-muted); font-size:.9rem; }
-  /* STAT CARD */
-  .stat-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px 24px; display:flex; flex-direction:column; gap:8px; transition:border-color .2s,transform .2s; }
-  .stat-card:hover { border-color:var(--border2); transform:translateY(-2px); }
-  .stat-label { font-size:.75rem; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:.06em; }
-  .stat-value { font-family:var(--font-display); font-size:2rem; font-weight:700; }
-  .stat-delta { font-size:.78rem; color:var(--accent); }
-  /* TOPIC ITEM */
-  .topic-item { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); margin-bottom:8px; transition:border-color .2s; }
-  .topic-item:hover { border-color:var(--border2); }
-  .topic-name { font-size:.88rem; font-weight:500; }
-  /* AI CARD */
-  .ai-card { background:linear-gradient(135deg,rgba(96,165,250,.06),rgba(52,211,153,.04)); border:1px solid rgba(96,165,250,.2); border-radius:var(--radius-lg); padding:24px; position:relative; overflow:hidden; }
-  .ai-card::before { content:''; position:absolute; top:-40px; right:-40px; width:120px; height:120px; border-radius:50%; background:radial-gradient(circle,rgba(96,165,250,.08),transparent 70%); }
-  .ai-label { display:flex; align-items:center; gap:6px; font-size:.72rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:.1em; margin-bottom:12px; }
-  .ai-label .pulse { width:6px; height:6px; background:var(--accent); border-radius:50%; animation:pulse-dot 1.5s ease-in-out infinite; }
-  @keyframes pulse-dot { 0%,100% { opacity:1;transform:scale(1); } 50% { opacity:.5;transform:scale(1.4); } }
-  /* QUIZ */
-  .quiz-option { display:flex; align-items:center; gap:12px; padding:14px 18px; background:var(--surface2); border:1.5px solid var(--border); border-radius:var(--radius); cursor:pointer; transition:all .18s ease; margin-bottom:10px; font-size:.9rem; }
-  .quiz-option:hover { border-color:var(--primary); background:rgba(96,165,250,.07); }
-  .quiz-option.selected { border-color:var(--primary); background:rgba(96,165,250,.1); }
-  .quiz-option.correct  { border-color:var(--accent); background:rgba(52,211,153,.1); }
-  .quiz-option.wrong    { border-color:var(--danger); background:rgba(248,113,113,.1); }
-  .option-key { width:28px; height:28px; min-width:28px; background:var(--surface3); border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:.75rem; font-weight:600; color:var(--text-muted); }
-  .quiz-option.selected .option-key { background:var(--primary); color:#0d0d0d; }
-  .quiz-progress { display:flex; gap:6px; margin-bottom:24px; }
-  .quiz-dot { flex:1; height:4px; border-radius:2px; background:var(--surface3); transition:background .3s; }
-  .quiz-dot.done { background:var(--primary); } .quiz-dot.current { background:var(--accent); }
-  /* GRIDS */
-  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-  .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
-  .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
-  @media(max-width:768px) { .grid-2,.grid-3,.grid-4 { grid-template-columns:1fr; } nav { padding:12px 16px; } .hero-title { font-size:2.4rem !important; } }
-  /* LAYOUT */
-  .app-layout { display:flex; min-height:calc(100vh - 57px); }
-  .sidebar { width:220px; min-width:220px; background:var(--surface); border-right:1px solid var(--border); padding:20px 12px; position:sticky; top:57px; height:calc(100vh - 57px); overflow-y:auto; }
-  .main-content { flex:1; padding:28px 32px; overflow-y:auto; max-width:1000px; }
-  .sidebar-item { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:8px; font-size:.875rem; font-weight:500; color:var(--text-muted); cursor:pointer; transition:all .15s ease; margin-bottom:4px; }
-  .sidebar-item:hover { background:var(--surface2); color:var(--text); }
-  .sidebar-item.active { background:rgba(96,165,250,.1); color:var(--primary); }
-  .sidebar-sep { height:1px; background:var(--border); margin:12px 4px; }
-  .sidebar-label { font-size:.68rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:.1em; padding:6px 12px 4px; font-weight:600; }
-  /* NOTIFICATION */
-  #notification { position:fixed; top:70px; right:20px; z-index:9999; background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:14px 18px; font-size:.875rem; min-width:260px; max-width:340px; display:flex; align-items:center; gap:10px; box-shadow:0 10px 40px rgba(0,0,0,.6); transform:translateX(120%); transition:transform .3s cubic-bezier(.34,1.56,.64,1); }
-  #notification.show { transform:translateX(0); }
-  #notification.success { border-color:rgba(52,211,153,.3); }
-  #notification.error   { border-color:rgba(248,113,113,.3); }
-  #notification.info    { border-color:rgba(96,165,250,.3); }
-  /* HERO */
-  .hero { padding:100px 60px 80px; max-width:1100px; margin:0 auto; }
-  .hero-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(52,211,153,.07); border:1px solid rgba(52,211,153,.2); border-radius:99px; padding:6px 16px; font-size:.78rem; font-weight:600; color:var(--accent); text-transform:uppercase; letter-spacing:.08em; margin-bottom:28px; }
-  .hero-title { font-family:var(--font-display); font-size:4rem; font-weight:800; line-height:1.05; margin-bottom:24px; background:linear-gradient(135deg,#f0f0f0 30%,#93c5fd 65%,#34d399 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-  .hero-sub { font-size:1.125rem; color:var(--text-muted); max-width:560px; line-height:1.7; margin-bottom:36px; }
-  .hero-ctas { display:flex; gap:12px; flex-wrap:wrap; }
-  /* FEATURES */
-  .features { padding:60px; max-width:1100px; margin:0 auto; }
-  .feature-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:28px; transition:all .25s ease; }
-  .feature-card:hover { border-color:var(--primary); transform:translateY(-4px); box-shadow:0 20px 40px rgba(0,0,0,.4); }
-  .feature-icon { width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; margin-bottom:16px; }
-  .icon-blue { background:rgba(96,165,250,.12); } .icon-green { background:rgba(52,211,153,.12); } .icon-warn { background:rgba(251,191,36,.12); } .icon-purple { background:rgba(167,139,250,.12); }
-  .feature-card h3 { font-family:var(--font-display); font-size:.95rem; font-weight:700; margin-bottom:8px; }
-  .feature-card p { font-size:.85rem; color:var(--text-muted); line-height:1.6; }
-  /* TABLE */
-  .data-table { width:100%; border-collapse:collapse; font-size:.875rem; }
-  .data-table th { text-align:left; padding:10px 16px; font-size:.72rem; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:.06em; border-bottom:1px solid var(--border); }
-  .data-table td { padding:12px 16px; border-bottom:1px solid var(--border); color:var(--text); }
-  .data-table tr:hover td { background:var(--surface2); }
-  .data-table tr:last-child td { border-bottom:none; }
-  /* LESSON */
-  .lesson-content { line-height:1.8; color:var(--text); }
-  .lesson-content h3 { font-family:var(--font-display); font-size:1.05rem; font-weight:700; color:var(--accent); margin:20px 0 8px; }
-  .lesson-content p { font-size:.9rem; color:var(--text-muted); margin-bottom:12px; }
-  .lesson-content ul { padding-left:20px; }
-  .lesson-content li { font-size:.9rem; color:var(--text-muted); margin-bottom:6px; }
-  .lesson-content strong { color:var(--text); }
-  /* ROLE CARD */
-  .role-card { background:var(--surface); border:2px solid var(--border); border-radius:var(--radius-lg); padding:40px 32px; text-align:center; cursor:pointer; transition:all .25s ease; max-width:280px; width:100%; }
-  .role-card:hover { border-color:var(--primary); transform:translateY(-4px); box-shadow:0 20px 40px rgba(0,0,0,.5); }
-  .role-card .role-icon { font-size:2.8rem; margin-bottom:16px; }
-  .role-card h2 { font-family:var(--font-display); font-size:1.25rem; font-weight:700; margin-bottom:8px; }
-  .role-card p { font-size:.85rem; color:var(--text-muted); }
-  .practice-q { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:16px 20px; margin-bottom:10px; }
-  .practice-q .q-num { font-family:var(--font-mono); font-size:.72rem; color:var(--primary); margin-bottom:6px; }
-  .practice-q .q-text { font-size:.9rem; }
-  .practice-q .q-ans { font-size:.82rem; color:var(--accent); margin-top:8px; display:none; }
-  .practice-q .q-ans.show { display:block; }
-  /* ERROR BOX */
-  .error-box { background:rgba(248,113,113,.08); border:1px solid rgba(248,113,113,.25); border-radius:var(--radius); padding:14px 16px; color:var(--danger); font-size:.875rem; margin-bottom:12px; display:none; }
-  .error-box.show { display:block; }
-  .section-title { font-family:var(--font-display); font-size:1.1rem; font-weight:600; }
-  .section-sub   { font-size:.82rem; color:var(--text-muted); margin-top:2px; }
-  .divider       { height:1px; background:var(--border); margin:20px 0; }
+:root{--bg:#1a1a1a;--surface:#222;--surface2:#2a2a2a;--surface3:#323232;--border:#333;--border2:#404040;--primary:#60a5fa;--accent:#34d399;--warn:#fbbf24;--danger:#f87171;--text:#f0f0f0;--text-muted:#888;--text-dim:#444;--font-display:'Sora',sans-serif;--font-body:'DM Sans',sans-serif;--font-mono:'JetBrains Mono',monospace;--r:12px;--rl:18px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;line-height:1.6}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--surface)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+.page{display:none;min-height:100vh}.page.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:14px 32px;background:rgba(26,26,26,.93);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--font-display);font-size:1.2rem;font-weight:700;display:flex;align-items:center;gap:10px;cursor:pointer}
+.nav-logo .dot{width:8px;height:8px;background:var(--accent);border-radius:50%;box-shadow:0 0 8px var(--accent)}
+.nav-actions{display:flex;gap:10px;align-items:center}
+.nav-user{display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--text-muted)}
+.nav-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:#fff;font-family:var(--font-display)}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 20px;border-radius:8px;border:none;font-family:var(--font-body);font-size:.875rem;font-weight:500;cursor:pointer;transition:all .2s ease;text-decoration:none}
+.btn-primary{background:var(--primary);color:#0d0d0d;font-weight:600;box-shadow:0 0 18px rgba(96,165,250,.2)}
+.btn-primary:hover{background:#3b82f6;transform:translateY(-1px);box-shadow:0 0 26px rgba(96,165,250,.35)}
+.btn-accent{background:var(--accent);color:#0d0d0d;font-weight:600;box-shadow:0 0 18px rgba(52,211,153,.18)}
+.btn-accent:hover{background:#10b981;transform:translateY(-1px);box-shadow:0 0 26px rgba(52,211,153,.3)}
+.btn-ghost{background:transparent;color:var(--text-muted);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--surface2);color:var(--text);border-color:var(--border2)}
+.btn-warn{background:var(--warn);color:#0d0d0d;font-weight:600}
+.btn-sm{padding:7px 14px;font-size:.8rem}.btn-lg{padding:14px 28px;font-size:1rem}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none!important;pointer-events:none}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:24px;transition:border-color .2s}
+.card:hover{border-color:var(--border2)}
+.input-group{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.input-group label{font-size:.82rem;color:var(--text-muted);font-weight:500;letter-spacing:.03em}
+.input-field{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:11px 14px;border-radius:8px;font-family:var(--font-body);font-size:.9rem;transition:border-color .2s,box-shadow .2s;outline:none;width:100%}
+.input-field:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(96,165,250,.1)}
+select.input-field option{background:var(--surface2)}
+.tag{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:.75rem;font-weight:600;font-family:var(--font-display)}
+.tag-success{background:rgba(52,211,153,.1);color:var(--accent);border:1px solid rgba(52,211,153,.25)}
+.tag-danger{background:rgba(248,113,113,.1);color:var(--danger);border:1px solid rgba(248,113,113,.25)}
+.tag-warn{background:rgba(251,191,36,.1);color:var(--warn);border:1px solid rgba(251,191,36,.25)}
+.tag-info{background:rgba(96,165,250,.1);color:var(--primary);border:1px solid rgba(96,165,250,.25)}
+.progress-track{background:var(--surface3);border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;border-radius:99px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+.progress-blue{background:linear-gradient(90deg,var(--primary),#818cf8)}
+.progress-green{background:linear-gradient(90deg,var(--accent),#34d399)}
+.progress-warn{background:linear-gradient(90deg,var(--warn),#fb923c)}
+.progress-danger{background:linear-gradient(90deg,var(--danger),#f97316)}
+.spinner{width:36px;height:36px;border-radius:50%;border:3px solid var(--border);border-top-color:var(--primary);animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader{display:flex;flex-direction:column;align-items:center;gap:16px;padding:60px 24px;text-align:center}
+.loader p{color:var(--text-muted);font-size:.9rem}
+.loader small{color:var(--text-dim);font-size:.78rem}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:20px 24px;display:flex;flex-direction:column;gap:8px;transition:border-color .2s,transform .2s}
+.stat-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.stat-label{font-size:.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.stat-value{font-family:var(--font-display);font-size:2rem;font-weight:700}
+.stat-delta{font-size:.78rem;color:var(--accent)}
+.topic-item{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px;transition:border-color .2s}
+.topic-item:hover{border-color:var(--border2)}
+.topic-name{font-size:.88rem;font-weight:500}
+.ai-card{background:linear-gradient(135deg,rgba(96,165,250,.06),rgba(52,211,153,.04));border:1px solid rgba(96,165,250,.2);border-radius:var(--rl);padding:24px;position:relative;overflow:hidden}
+.ai-card::before{content:'';position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(96,165,250,.08),transparent 70%)}
+.ai-label{display:flex;align-items:center;gap:6px;font-size:.72rem;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px}
+.ai-label .pulse{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse-dot 1.5s ease-in-out infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+.quiz-option{display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--r);cursor:pointer;transition:all .18s ease;margin-bottom:10px;font-size:.9rem}
+.quiz-option:hover{border-color:var(--primary);background:rgba(96,165,250,.07)}
+.quiz-option.selected{border-color:var(--primary);background:rgba(96,165,250,.1)}
+.option-key{width:28px;height:28px;min-width:28px;background:var(--surface3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:.75rem;font-weight:600;color:var(--text-muted)}
+.quiz-option.selected .option-key{background:var(--primary);color:#0d0d0d}
+.quiz-progress{display:flex;gap:6px;margin-bottom:24px}
+.quiz-dot{flex:1;height:4px;border-radius:2px;background:var(--surface3);transition:background .3s}
+.quiz-dot.done{background:var(--primary)}.quiz-dot.current{background:var(--accent)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:768px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}nav{padding:12px 16px}}
+.app-layout{display:flex;min-height:calc(100vh - 57px)}
+.sidebar{width:220px;min-width:220px;background:var(--surface);border-right:1px solid var(--border);padding:20px 12px;position:sticky;top:57px;height:calc(100vh - 57px);overflow-y:auto}
+.main-content{flex:1;padding:28px 32px;overflow-y:auto}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;font-size:.875rem;font-weight:500;color:var(--text-muted);cursor:pointer;transition:all .15s ease;margin-bottom:4px}
+.sidebar-item:hover{background:var(--surface2);color:var(--text)}
+.sidebar-item.active{background:rgba(96,165,250,.1);color:var(--primary)}
+.sidebar-sep{height:1px;background:var(--border);margin:12px 4px}
+.sidebar-label{font-size:.68rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;padding:6px 12px 4px;font-weight:600}
+#notification{position:fixed;top:70px;right:20px;z-index:9999;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px 18px;font-size:.875rem;min-width:260px;max-width:340px;display:flex;align-items:center;gap:10px;box-shadow:0 10px 40px rgba(0,0,0,.6);transform:translateX(120%);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+#notification.show{transform:translateX(0)}
+#notification.success{border-color:rgba(52,211,153,.3)}
+#notification.error{border-color:rgba(248,113,113,.3)}
+#notification.info{border-color:rgba(96,165,250,.3)}
+.hero{padding:90px 60px 70px;max-width:1100px;margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.2);border-radius:99px;padding:6px 16px;font-size:.78rem;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:28px}
+.hero-title{font-family:var(--font-display);font-size:3.8rem;font-weight:800;line-height:1.05;margin-bottom:24px;background:linear-gradient(135deg,#f0f0f0 30%,#93c5fd 65%,#34d399 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:1.1rem;color:var(--text-muted);max-width:560px;line-height:1.7;margin-bottom:36px}
+.feature-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:28px;transition:all .25s ease}
+.feature-card:hover{border-color:var(--primary);transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,.4)}
+.feature-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:16px}
+.icon-blue{background:rgba(96,165,250,.12)}.icon-green{background:rgba(52,211,153,.12)}.icon-warn{background:rgba(251,191,36,.12)}.icon-purple{background:rgba(167,139,250,.12)}
+.data-table{width:100%;border-collapse:collapse;font-size:.875rem}
+.data-table th{text-align:left;padding:10px 16px;font-size:.72rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border)}
+.data-table td{padding:12px 16px;border-bottom:1px solid var(--border)}
+.data-table tr:hover td{background:var(--surface2)}
+.data-table tr:last-child td{border-bottom:none}
+.lesson-content{line-height:1.8}
+.lesson-content h3{font-family:var(--font-display);font-size:1.05rem;font-weight:700;color:var(--accent);margin:20px 0 8px}
+.lesson-content p{font-size:.9rem;color:var(--text-muted);margin-bottom:12px}
+.lesson-content ul{padding-left:20px}
+.lesson-content li{font-size:.9rem;color:var(--text-muted);margin-bottom:6px}
+.lesson-content strong{color:var(--text)}
+.practice-q{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:16px 20px;margin-bottom:10px}
+.practice-q .q-num{font-family:var(--font-mono);font-size:.72rem;color:var(--primary);margin-bottom:6px}
+.practice-q .q-text{font-size:.9rem}
+.practice-q .q-ans{font-size:.82rem;color:var(--accent);margin-top:8px;display:none}
+.practice-q .q-ans.show{display:block}
+.error-box{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.25);border-radius:var(--r);padding:14px 16px;color:var(--danger);font-size:.875rem;margin-bottom:12px;display:none}
+.error-box.show{display:block}
+.role-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--rl);padding:40px 32px;text-align:center;cursor:pointer;transition:all .25s ease;max-width:280px;width:100%}
+.role-card:hover{border-color:var(--primary);transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,.5)}
+.role-card .role-icon{font-size:2.8rem;margin-bottom:16px}
+.ollama-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:6px;padding:4px 10px;font-size:.72rem;font-weight:600;color:var(--warn);font-family:var(--font-mono)}
+.section-title{font-family:var(--font-display);font-size:1.1rem;font-weight:600}
 </style>
 </head>
 <body>
+
 <div id="notification"></div>
 
-<!-- ══════ LANDING ══════ -->
+<!-- ═══════════ LANDING ═══════════ -->
 <div id="page-landing" class="page active">
   <nav>
-    <div class="nav-logo" onclick="goto('landing')"><div class="dot"></div>EduInsight</div>
+    <div class="nav-logo" onclick="goto('landing')"><div class="dot"></div>SmartGap_AI</div>
     <div class="nav-actions">
+      <div class="ollama-badge">🤖 phi3</div>
       <button class="btn btn-ghost btn-sm" onclick="goto('role-select')">Sign In</button>
       <button class="btn btn-primary btn-sm" onclick="goto('role-select')">Get Started →</button>
     </div>
   </nav>
   <div class="hero">
-    <div class="hero-badge">⚡ AI-Powered Learning Gap Detection</div>
-    <h1 class="hero-title">Know exactly<br>what to teach<br>&amp; learn next.</h1>
-    <p class="hero-sub">EduInsight uses AI to detect individual learning gaps, generate personalized lessons, and give teachers real classroom intelligence — all in real time.</p>
-    <div class="hero-ctas">
-      <button class="btn btn-accent btn-lg" onclick="goto('role-select')">Start Learning Free →</button>
-      <button class="btn btn-ghost btn-lg" onclick="document.getElementById('features-section').scrollIntoView({behavior:'smooth'})">See How It Works</button>
+    <div class="hero-badge">🤖 Powered by Ollama phi3 + MongoDB</div>
+    <h1 class="hero-title">AI quizzes.<br>Real gaps.<br>Stored forever.</h1>
+    <p class="hero-sub">SmartGap_AI generates quizzes and lessons using your local phi3 model, detects learning gaps automatically, and stores everything in MongoDB.</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <button class="btn btn-accent btn-lg" onclick="goto('role-select')">Start Learning →</button>
+      <button class="btn btn-ghost btn-lg" onclick="checkHealth()">🩺 Check System Status</button>
     </div>
   </div>
-  <div class="features" id="features-section">
-    <h2 style="font-family:var(--font-display);font-size:2rem;font-weight:700;text-align:center;margin-bottom:8px;">Everything you need to close the gap</h2>
-    <p style="text-align:center;color:var(--text-muted);margin-bottom:48px;">From quiz to personalized lesson in under 60 seconds.</p>
+  <div style="max-width:1100px;margin:0 auto;padding:0 60px 60px;">
     <div class="grid-3">
-      <div class="feature-card"><div class="feature-icon icon-blue">🧠</div><h3>AI Gap Detection</h3><p>Claude analyzes every answer and maps it to specific concepts, pinpointing exactly where understanding breaks down.</p></div>
-      <div class="feature-card"><div class="feature-icon icon-green">📖</div><h3>Personalized Mini Lessons</h3><p>AI generates simplified, targeted explanations for each weak concept — no generic textbook content.</p></div>
-      <div class="feature-card"><div class="feature-icon icon-warn">✏️</div><h3>Practice Question Generator</h3><p>Receive custom practice questions on your specific weak spots so you improve where it matters most.</p></div>
-      <div class="feature-card"><div class="feature-icon icon-purple">📊</div><h3>Class Analytics</h3><p>Teachers get a bird's eye view of class performance with topic-level breakdowns and at-risk alerts.</p></div>
-      <div class="feature-card"><div class="feature-icon icon-blue">💡</div><h3>AI Teaching Suggestions</h3><p>AI-crafted pedagogical recommendations for topics your class struggles with most.</p></div>
-      <div class="feature-card"><div class="feature-icon icon-green">📈</div><h3>Progress Tracking</h3><p>Visual dashboards showing each student's mastery per topic over time, powered by real DB data.</p></div>
+      <div class="feature-card"><div class="feature-icon icon-warn">🤖</div><h3 style="font-family:var(--font-display);font-size:.95rem;font-weight:700;margin-bottom:8px;">Ollama phi3 Generation</h3><p style="font-size:.85rem;color:var(--text-muted);">All quizzes and lessons generated locally by phi3 — no cloud API needed.</p></div>
+      <div class="feature-card"><div class="feature-icon icon-blue">💾</div><h3 style="font-family:var(--font-display);font-size:.95rem;font-weight:700;margin-bottom:8px;">Everything in MongoDB</h3><p style="font-size:.85rem;color:var(--text-muted);">Generated quizzes, student attempts, AI gap analyses and lessons all persist in the database.</p></div>
+      <div class="feature-card"><div class="feature-icon icon-green">📊</div><h3 style="font-family:var(--font-display);font-size:.95rem;font-weight:700;margin-bottom:8px;">Per-Student Intelligence</h3><p style="font-size:.85rem;color:var(--text-muted);">Each student sees data pulled from their own DB profile — real scores, real weak topics.</p></div>
     </div>
   </div>
-  <div style="text-align:center;padding:60px 20px;border-top:1px solid var(--border);">
-    <h2 style="font-family:var(--font-display);font-size:1.8rem;font-weight:700;margin-bottom:12px;">Ready to transform your classroom?</h2>
-    <p style="color:var(--text-muted);margin-bottom:28px;">Real student data. Real AI insights. Real results.</p>
-    <button class="btn btn-accent btn-lg" onclick="goto('role-select')">Get Started — It's Free →</button>
-  </div>
-  <div style="text-align:center;padding:20px;color:var(--text-dim);font-size:.78rem;">© 2025 EduInsight · AI-Powered Learning</div>
+  <div style="text-align:center;padding:20px;border-top:1px solid var(--border);color:var(--text-dim);font-size:.78rem;">© 2025 SmartGap_AI · Ollama phi3 + MongoDB + Express</div>
 </div>
 
-<!-- ══════ ROLE SELECT ══════ -->
+<!-- ═══════════ ROLE SELECT ═══════════ -->
 <div id="page-role-select" class="page">
-  <nav><div class="nav-logo" onclick="goto('landing')"><div class="dot"></div>EduInsight</div><button class="btn btn-ghost btn-sm" onclick="goto('landing')">← Back</button></nav>
+  <nav><div class="nav-logo" onclick="goto('landing')"><div class="dot"></div>SmartGap_AI</div><button class="btn btn-ghost btn-sm" onclick="goto('landing')">← Back</button></nav>
   <div style="display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 57px);flex-direction:column;gap:32px;padding:40px 20px;">
-    <div style="text-align:center;margin-bottom:8px;"><h1 style="font-family:var(--font-display);font-size:2rem;font-weight:700;margin-bottom:8px;">Who are you?</h1><p style="color:var(--text-muted);">Choose your role to continue.</p></div>
+    <div style="text-align:center;"><h1 style="font-family:var(--font-display);font-size:2rem;font-weight:700;margin-bottom:8px;">Who are you?</h1><p style="color:var(--text-muted);">Your dashboard is loaded from MongoDB.</p></div>
     <div style="display:flex;gap:24px;flex-wrap:wrap;justify-content:center;">
-      <div class="role-card" onclick="goto('student-login')"><div class="role-icon">🎓</div><h2>I'm a Student</h2><p>Take quizzes, discover learning gaps, get personalized AI lessons.</p><button class="btn btn-primary" style="margin-top:20px;width:100%;">Student Login →</button></div>
-      <div class="role-card" onclick="goto('teacher-login')"><div class="role-icon">📚</div><h2>I'm a Teacher</h2><p>Upload quizzes, analyze class performance, get AI teaching insights.</p><button class="btn btn-ghost" style="margin-top:20px;width:100%;border-color:var(--border2);">Teacher Login →</button></div>
+      <div class="role-card" onclick="goto('student-login')">
+        <div class="role-icon">🎓</div>
+        <h2 style="font-family:var(--font-display);font-size:1.25rem;font-weight:700;margin-bottom:8px;">I'm a Student</h2>
+        <p style="font-size:.85rem;color:var(--text-muted);">Take AI-generated quizzes, get personalized lessons.</p>
+        <button class="btn btn-primary" style="margin-top:20px;width:100%;">Student Login →</button>
+      </div>
+      <div class="role-card" onclick="goto('teacher-login')">
+        <div class="role-icon">📚</div>
+        <h2 style="font-family:var(--font-display);font-size:1.25rem;font-weight:700;margin-bottom:8px;">I'm a Teacher</h2>
+        <p style="font-size:.85rem;color:var(--text-muted);">Generate quizzes, view all student data, get AI insights.</p>
+        <button class="btn btn-ghost" style="margin-top:20px;width:100%;border-color:var(--border2);">Teacher Login →</button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ══════ STUDENT LOGIN ══════ -->
+<!-- ═══════════ STUDENT LOGIN ═══════════ -->
 <div id="page-student-login" class="page">
-  <nav><div class="nav-logo" onclick="goto('landing')"><div class="dot"></div>EduInsight</div><button class="btn btn-ghost btn-sm" onclick="goto('role-select')">← Back</button></nav>
+  <nav><div class="nav-logo" onclick="goto('landing')"><div class="dot"></div>SmartGap_AI</div><button class="btn btn-ghost btn-sm" onclick="goto('role-select')">← Back</button></nav>
   <div style="display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 57px);padding:40px 20px;">
     <div style="width:100%;max-width:400px;">
-      <div style="text-align:center;margin-bottom:32px;"><div style="font-size:2.5rem;margin-bottom:12px;">🎓</div><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;margin-bottom:6px;">Student Login</h1><p style="color:var(--text-muted);font-size:.875rem;">Sign in to access your personal dashboard.</p></div>
+      <div style="text-align:center;margin-bottom:32px;">
+        <div style="font-size:2.5rem;margin-bottom:12px;">🎓</div>
+        <h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;margin-bottom:6px;">Student Login</h1>
+        <p style="color:var(--text-muted);font-size:.875rem;">Your dashboard pulls live from MongoDB.</p>
+      </div>
       <div class="card">
         <div id="s-error" class="error-box"></div>
-        <div class="input-group"><label>Email or Student ID</label><input class="input-field" id="s-email" placeholder="alex@school.edu or STU-001"></div>
-        <div class="input-group"><label>Password</label><input class="input-field" id="s-pass" type="password" placeholder="••••••••"></div>
+        <div class="input-group">
+          <label>Email or Student ID</label>
+          <input class="input-field" id="s-email" placeholder="alex@gmail.com or STU-01" value="alex@gmail.com">
+        </div>
+        <div class="input-group">
+          <label>Password</label>
+          <input class="input-field" id="s-pass" type="password" placeholder="••••••••" value="pass12" onkeydown="if(event.key==='Enter')studentLogin()">
+        </div>
         <button class="btn btn-primary" id="s-login-btn" style="width:100%;justify-content:center;margin-top:8px;" onclick="studentLogin()">Sign In →</button>
-        <div style="text-align:center;margin-top:14px;font-size:.78rem;color:var(--text-dim);">Demo students: alex@school.edu | ravi@school.edu | meera@school.edu<br>All passwords: pass123</div>
+        <div style="text-align:center;margin-top:12px;font-size:.78rem;color:var(--text-dim);">Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6f0e030a172f08020e0603410c0002">[email&#160;protected]</a> · ID: STU-01 · Password: pass12</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════ TEACHER LOGIN ══════ -->
+<!-- ═══════════ TEACHER LOGIN ═══════════ -->
 <div id="page-teacher-login" class="page">
-  <nav><div class="nav-logo" onclick="goto('landing')"><div class="dot"></div>EduInsight</div><button class="btn btn-ghost btn-sm" onclick="goto('role-select')">← Back</button></nav>
+  <nav><div class="nav-logo" onclick="goto('landing')"><div class="dot"></div>SmartGap_AI</div><button class="btn btn-ghost btn-sm" onclick="goto('role-select')">← Back</button></nav>
   <div style="display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 57px);padding:40px 20px;">
     <div style="width:100%;max-width:400px;">
-      <div style="text-align:center;margin-bottom:32px;"><div style="font-size:2.5rem;margin-bottom:12px;">📚</div><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;margin-bottom:6px;">Teacher Login</h1><p style="color:var(--text-muted);font-size:.875rem;">Access class analytics and AI teaching tools.</p></div>
+      <div style="text-align:center;margin-bottom:32px;">
+        <div style="font-size:2.5rem;margin-bottom:12px;">📚</div>
+        <h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;margin-bottom:6px;">Teacher Login</h1>
+      </div>
       <div class="card">
         <div id="t-error" class="error-box"></div>
-        <div class="input-group"><label>Teacher ID</label><input class="input-field" id="t-id" placeholder="TCH-001" value="TCH-001"></div>
-        <div class="input-group"><label>Password</label><input class="input-field" id="t-pass" type="password" placeholder="••••••••" value="teacher123"></div>
+        <div class="input-group">
+          <label>Teacher ID</label>
+          <input class="input-field" id="t-id" placeholder="TCH-001" value="TCH-001">
+        </div>
+        <div class="input-group">
+          <label>Password</label>
+          <input class="input-field" id="t-pass" type="password" placeholder="••••••••" value="teacher123" onkeydown="if(event.key==='Enter')teacherLogin()">
+        </div>
         <button class="btn btn-primary" id="t-login-btn" style="width:100%;justify-content:center;margin-top:8px;" onclick="teacherLogin()">Sign In →</button>
-        <div style="text-align:center;margin-top:14px;font-size:.78rem;color:var(--text-dim);">ID: TCH-001 · Password: teacher123</div>
+        <div style="text-align:center;margin-top:12px;font-size:.78rem;color:var(--text-dim);">ID: TCH-001 · Password: teacher123</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════ STUDENT DASHBOARD ══════ -->
+<!-- ═══════════ STUDENT DASHBOARD ═══════════ -->
 <div id="page-student-dashboard" class="page">
   <nav>
-    <div class="nav-logo" onclick="goto('landing')"><div class="dot"></div>EduInsight</div>
+    <div class="nav-logo" onclick="goto('landing')"><div class="dot"></div>SmartGap_AI</div>
     <div class="nav-actions">
+      <div class="ollama-badge">🤖 phi3</div>
       <div class="nav-user"><span id="s-nav-name"></span><div class="nav-avatar" id="s-nav-avatar"></div></div>
       <button class="btn btn-ghost btn-sm" onclick="logout()">Sign Out</button>
     </div>
@@ -273,74 +247,58 @@
     <div class="sidebar">
       <div class="sidebar-label">Student</div>
       <div class="sidebar-item active" id="sbar-dashboard" onclick="showStudentSection('dashboard')"><span>🏠</span> Dashboard</div>
-      <div class="sidebar-item" id="sbar-quiz"      onclick="showStudentSection('quiz')"><span>✏️</span> Take Quiz</div>
-      <div class="sidebar-item" id="sbar-lessons"   onclick="showStudentSection('lessons')"><span>📖</span> My Lessons</div>
-      <div class="sidebar-item" id="sbar-progress"  onclick="showStudentSection('progress')"><span>📈</span> Progress</div>
+      <div class="sidebar-item" id="sbar-quiz"     onclick="showStudentSection('quiz')"><span>✏️</span> Assigned Quizzes</div>
+      <div class="sidebar-item" id="sbar-lessons"  onclick="showStudentSection('lessons')"><span>📖</span> My Lessons</div>
+      <div class="sidebar-item" id="sbar-progress" onclick="showStudentSection('progress')"><span>📈</span> Progress</div>
       <div class="sidebar-sep"></div>
       <div class="sidebar-item" onclick="logout()"><span>🚪</span> Sign Out</div>
     </div>
     <div class="main-content">
-      <!-- DASHBOARD -->
       <div id="s-section-dashboard">
-        <div id="s-dash-loading" class="loading-overlay"><div class="spinner"></div><p>Loading your dashboard…</p></div>
+        <div id="s-dash-loading" class="loader"><div class="spinner"></div><p>Loading your dashboard from MongoDB…</p></div>
         <div id="s-dash-content" style="display:none;"></div>
       </div>
-      <!-- QUIZ -->
       <div id="s-section-quiz" style="display:none;">
-        <div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;">Take a Quiz</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">Choose a subject and topic to begin.</p></div>
-        <div id="quiz-selector">
-          <div class="grid-2">
-            <div class="input-group"><label>Subject</label><select class="input-field" id="quiz-subject" onchange="updateTopics()"><option value="Physics">Physics</option><option value="Mathematics">Mathematics</option><option value="Chemistry">Chemistry</option></select></div>
-            <div class="input-group"><label>Topic</label><select class="input-field" id="quiz-topic"><option value="Laws of Motion">Laws of Motion</option><option value="Thermodynamics">Thermodynamics</option></select></div>
-          </div>
-          <div style="display:flex;gap:16px;margin-top:8px;flex-wrap:wrap;">
-            <div class="card" style="flex:1;min-width:150px;"><div style="font-size:.8rem;color:var(--text-muted);margin-bottom:4px;">Questions</div><div style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;">10</div></div>
-            <div class="card" style="flex:1;min-width:150px;"><div style="font-size:.8rem;color:var(--text-muted);margin-bottom:4px;">Time Limit</div><div style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;">15 min</div></div>
-            <div class="card" style="flex:1;min-width:150px;"><div style="font-size:.8rem;color:var(--text-muted);margin-bottom:4px;">Difficulty</div><div style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;">Medium</div></div>
-          </div>
-          <button class="btn btn-accent btn-lg" style="margin-top:20px;" onclick="startQuiz()">Start Quiz →</button>
-        </div>
+        <div id="quiz-selector"></div>
         <div id="quiz-active" style="display:none;"></div>
       </div>
-      <!-- LESSONS -->
       <div id="s-section-lessons" style="display:none;">
-        <div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;">My AI Lessons</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">Personalized lessons based on your quiz results.</p></div>
-        <div id="lessons-grid" style="display:none;"></div>
-        <div id="lesson-view-inner" style="display:none;"></div>
+        <div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;">My AI Lessons</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">Generated by phi3, cached in MongoDB.</p></div>
+        <div id="lessons-grid"></div>
       </div>
-      <!-- PROGRESS -->
       <div id="s-section-progress" style="display:none;">
-        <div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;">Progress Tracker</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">Your learning journey from the database.</p></div>
+        <div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;">Progress Tracker</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">Your scores from MongoDB.</p></div>
         <div id="s-progress-content"></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════ QUIZ RESULTS ══════ -->
+<!-- ═══════════ QUIZ RESULTS ═══════════ -->
 <div id="page-quiz-results" class="page">
-  <nav><div class="nav-logo" onclick="goto('landing')"><div class="dot"></div>EduInsight</div><div class="nav-actions"><button class="btn btn-ghost btn-sm" onclick="goto('student-dashboard')">← Dashboard</button></div></nav>
+  <nav><div class="nav-logo" onclick="goto('landing')"><div class="dot"></div>SmartGap_AI</div><div class="nav-actions"><button class="btn btn-ghost btn-sm" onclick="goto('student-dashboard')">← Dashboard</button></div></nav>
   <div style="max-width:780px;margin:0 auto;padding:40px 24px;">
-    <div style="text-align:center;margin-bottom:40px;"><div style="font-size:3rem;margin-bottom:12px;">🧠</div><h1 style="font-family:var(--font-display);font-size:1.8rem;font-weight:700;margin-bottom:8px;">AI is analyzing your answers…</h1><p style="color:var(--text-muted);" id="results-status">Mapping concepts to your responses.</p></div>
-    <div id="results-loading" class="loading-overlay"><div class="spinner"></div><p>Running gap detection + saving to database…</p></div>
+    <div style="text-align:center;margin-bottom:40px;"><div style="font-size:3rem;margin-bottom:12px;">🧠</div><h1 style="font-family:var(--font-display);font-size:1.8rem;font-weight:700;margin-bottom:8px;">phi3 is analyzing your answers…</h1><p style="color:var(--text-muted);" id="results-status">Saving to MongoDB + running gap detection.</p></div>
+    <div id="results-loading" class="loader"><div class="spinner"></div><p>Running phi3 gap detection…</p><small>This may take 20–60s on first run</small></div>
     <div id="results-content" style="display:none;"></div>
   </div>
 </div>
 
-<!-- ══════ LESSON PAGE ══════ -->
+<!-- ═══════════ LESSON PAGE ═══════════ -->
 <div id="page-lesson-view" class="page">
-  <nav><div class="nav-logo" onclick="goto('landing')"><div class="dot"></div>EduInsight</div><div class="nav-actions"><button class="btn btn-ghost btn-sm" onclick="goto('student-dashboard');showStudentSection('lessons')">← Lessons</button></div></nav>
+  <nav><div class="nav-logo" onclick="goto('landing')"><div class="dot"></div>SmartGap_AI</div><div class="nav-actions"><button class="btn btn-ghost btn-sm" onclick="goto('student-dashboard');showStudentSection('lessons')">← Lessons</button></div></nav>
   <div style="max-width:780px;margin:0 auto;padding:40px 24px;">
-    <div id="lesson-page-loading" class="loading-overlay"><div class="spinner"></div><p id="lesson-loading-msg">Generating your lesson…</p></div>
+    <div id="lesson-page-loading" class="loader"><div class="spinner"></div><p id="lesson-loading-msg">Generating lesson with phi3…</p><small>First generation may take 30–90s. Cached after that.</small></div>
     <div id="lesson-page-content" style="display:none;"></div>
   </div>
 </div>
 
-<!-- ══════ TEACHER DASHBOARD ══════ -->
+<!-- ═══════════ TEACHER DASHBOARD ═══════════ -->
 <div id="page-teacher-dashboard" class="page">
   <nav>
-    <div class="nav-logo" onclick="goto('landing')"><div class="dot"></div>EduInsight</div>
+    <div class="nav-logo" onclick="goto('landing')"><div class="dot"></div>SmartGap_AI</div>
     <div class="nav-actions">
+      <div class="ollama-badge">🤖 phi3</div>
       <div class="nav-user"><span id="t-nav-name"></span><div class="nav-avatar" id="t-nav-avatar">SJ</div></div>
       <button class="btn btn-ghost btn-sm" onclick="logout()">Sign Out</button>
     </div>
@@ -349,671 +307,355 @@
     <div class="sidebar">
       <div class="sidebar-label">Teacher</div>
       <div class="sidebar-item active" id="tbar-dashboard"  onclick="showTeacherSection('dashboard')"><span>🏠</span> Dashboard</div>
-      <div class="sidebar-item" id="tbar-upload"   onclick="showTeacherSection('upload')"><span>📤</span> Upload Quiz</div>
+      <div class="sidebar-item" id="tbar-generate"  onclick="showTeacherSection('generate')"><span>🤖</span> Generate Quiz</div>
+      <div class="sidebar-item" id="tbar-assignments" onclick="showTeacherSection('assignments')"><span>📋</span> Assignments</div>
       <div class="sidebar-item" id="tbar-analytics" onclick="showTeacherSection('analytics')"><span>📊</span> Class Analytics</div>
-      <div class="sidebar-item" id="tbar-students" onclick="showTeacherSection('students')"><span>👥</span> Students</div>
-      <div class="sidebar-item" id="tbar-insights" onclick="showTeacherSection('insights')"><span>💡</span> AI Insights</div>
+      <div class="sidebar-item" id="tbar-students"  onclick="showTeacherSection('students')"><span>👥</span> Students</div>
+      <div class="sidebar-item" id="tbar-library"   onclick="showTeacherSection('library')"><span>📚</span> Quiz Library</div>
+      <div class="sidebar-item" id="tbar-insights"  onclick="showTeacherSection('insights')"><span>💡</span> AI Insights</div>
       <div class="sidebar-sep"></div>
       <div class="sidebar-item" onclick="logout()"><span>🚪</span> Sign Out</div>
     </div>
     <div class="main-content">
-      <div id="t-section-dashboard"><div id="t-dash-loading" class="loading-overlay"><div class="spinner"></div><p>Loading class data…</p></div><div id="t-dash-content" style="display:none;"></div></div>
-      <div id="t-section-upload" style="display:none;"></div>
+      <div id="t-section-dashboard">
+        <div id="t-dash-loading" class="loader"><div class="spinner"></div><p>Loading class data from MongoDB…</p></div>
+        <div id="t-dash-content" style="display:none;"></div>
+      </div>
+      <div id="t-section-generate"  style="display:none;"></div>
+      <div id="t-section-assignments" style="display:none;"></div>
       <div id="t-section-analytics" style="display:none;"></div>
-      <div id="t-section-students" style="display:none;"></div>
-      <div id="t-section-insights" style="display:none;"></div>
+      <div id="t-section-students"  style="display:none;"></div>
+      <div id="t-section-library"   style="display:none;"></div>
+      <div id="t-section-insights"  style="display:none;"></div>
     </div>
   </div>
 </div>
 
-<script>
-// ════════════════════════════════════════════════════════
-//  CONFIG — change this to your backend URL
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ════════════════════════════════════════════════════════
 const API = 'http://localhost:5000/api';
-
-// ════════════════════════════════════════════════════════
-//  STATE
-// ════════════════════════════════════════════════════════
 let state = {
-  token: localStorage.getItem('edu_token'),
-  role:  localStorage.getItem('edu_role'),
-  user:  JSON.parse(localStorage.getItem('edu_user') || 'null'),
-  quizAnswers: [],
-  currentQuiz: null,
-  currentQuestion: 0,
-  teacherData: null,
+  token: localStorage.getItem('smartgap_token'),
+  role:  localStorage.getItem('smartgap_role'),
+  user:  JSON.parse(localStorage.getItem('smartgap_user') || 'null'),
+  teacherData: null, currentQuiz: null, quizAnswers: [], currentQuestion: 0,
 };
 
-// ════════════════════════════════════════════════════════
-//  API HELPER
-// ════════════════════════════════════════════════════════
-async function api(path, method = 'GET', body = null) {
-  const headers = { 'Content-Type': 'application/json' };
-  if (state.token) headers['Authorization'] = `Bearer ${state.token}`;
-  const res = await fetch(API + path, { method, headers, body: body ? JSON.stringify(body) : null });
+async function api(path, method='GET', body=null) {
+  const headers = {'Content-Type':'application/json'};
+  if (state.token) headers['Authorization'] = 'Bearer ' + state.token;
+  const res  = await fetch(API + path, { method, headers, body: body ? JSON.stringify(body) : null });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'API error');
   return data;
 }
 
-// ════════════════════════════════════════════════════════
-//  ROUTER
-// ════════════════════════════════════════════════════════
 function goto(pageId) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const pg = document.getElementById('page-' + pageId);
   if (pg) pg.classList.add('active');
-  window.scrollTo(0, 0);
+  window.scrollTo(0,0);
 }
 
-// ════════════════════════════════════════════════════════
-//  AUTH
-// ════════════════════════════════════════════════════════
+// ── AUTH ─────────────────────────────────────────────────
 async function studentLogin() {
-  const email = document.getElementById('s-email').value.trim();
-  const pass  = document.getElementById('s-pass').value;
-  if (!email || !pass) return showError('s-error', 'Please enter your email and password.');
-  const btn = document.getElementById('s-login-btn');
-  btn.disabled = true; btn.textContent = 'Signing in…';
-  hideError('s-error');
+  const emailVal = document.getElementById('s-email').value.trim();
+  const pass     = document.getElementById('s-pass').value;
+  if (!emailVal || !pass) return showErr('s-error','Enter your email (or Student ID) and password.');
+  setLoading('s-login-btn', true, 'Signing in…');
+  hideErr('s-error');
   try {
-    const isId = email.toUpperCase().startsWith('STU-');
-    const body = isId ? { studentId: email, password: pass } : { email, password: pass };
+    const isId = /^STU-/i.test(emailVal);
+    const body = isId ? { studentId: emailVal, password: pass } : { email: emailVal, password: pass };
     const data = await api('/auth/student', 'POST', body);
-    state.token = data.token; state.role = 'student'; state.user = data.student;
-    localStorage.setItem('edu_token', data.token);
-    localStorage.setItem('edu_role',  'student');
-    localStorage.setItem('edu_user',  JSON.stringify(data.student));
-    document.getElementById('s-nav-name').textContent = data.student.name;
-    document.getElementById('s-nav-avatar').textContent = data.student.name.charAt(0);
+    saveSession(data.token, 'student', data.student);
     goto('student-dashboard');
+    document.getElementById('s-nav-name').textContent   = data.student.name;
+    document.getElementById('s-nav-avatar').textContent = data.student.name.charAt(0);
     showStudentSection('dashboard');
     loadStudentDashboard();
-    notify(`Welcome back, ${data.student.name}! 👋`, 'success');
-  } catch (err) {
-    showError('s-error', err.message);
-  } finally {
-    btn.disabled = false; btn.textContent = 'Sign In →';
-  }
+    notify('Welcome back, ' + data.student.name + '! 👋', 'success');
+  } catch(e) { showErr('s-error', e.message); }
+  finally { setLoading('s-login-btn', false, 'Sign In →'); }
 }
 
 async function teacherLogin() {
   const tid  = document.getElementById('t-id').value.trim();
   const pass = document.getElementById('t-pass').value;
-  if (!tid || !pass) return showError('t-error', 'Please enter Teacher ID and password.');
-  const btn = document.getElementById('t-login-btn');
-  btn.disabled = true; btn.textContent = 'Signing in…';
-  hideError('t-error');
+  if (!tid || !pass) return showErr('t-error','Enter Teacher ID and password.');
+  setLoading('t-login-btn', true, 'Signing in…');
+  hideErr('t-error');
   try {
-    const data = await api('/auth/teacher', 'POST', { teacherId: tid, password: pass });
-    state.token = data.token; state.role = 'teacher'; state.user = data.teacher;
-    localStorage.setItem('edu_token', data.token);
-    localStorage.setItem('edu_role',  'teacher');
-    localStorage.setItem('edu_user',  JSON.stringify(data.teacher));
-    document.getElementById('t-nav-name').textContent = data.teacher.name;
-    document.getElementById('t-nav-avatar').textContent = data.teacher.name.split(' ').map(w => w[0]).join('').slice(0, 2);
+    const data = await api('/auth/teacher','POST',{teacherId:tid,password:pass});
+    saveSession(data.token, 'teacher', data.teacher);
     goto('teacher-dashboard');
+    document.getElementById('t-nav-name').textContent   = data.teacher.name;
+    document.getElementById('t-nav-avatar').textContent = data.teacher.name.split(' ').map(w=>w[0]).join('').slice(0,2);
     showTeacherSection('dashboard');
     loadTeacherDashboard();
-    notify(`Welcome, ${data.teacher.name}!`, 'success');
-  } catch (err) {
-    showError('t-error', err.message);
-  } finally {
-    btn.disabled = false; btn.textContent = 'Sign In →';
-  }
+    notify('Welcome, ' + data.teacher.name + '!', 'success');
+  } catch(e) { showErr('t-error', e.message); }
+  finally { setLoading('t-login-btn', false, 'Sign In →'); }
 }
 
 function logout() {
-  state.token = null; state.role = null; state.user = null;
-  localStorage.removeItem('edu_token');
-  localStorage.removeItem('edu_role');
-  localStorage.removeItem('edu_user');
-  goto('landing');
-  notify('Signed out successfully.', 'info');
+  localStorage.removeItem('smartgap_token');
+  localStorage.removeItem('smartgap_role');
+  localStorage.removeItem('smartgap_user');
+  state.token = null; state.role = null; state.user = null; state.teacherData = null;
+  goto('landing'); notify('Signed out.','info');
+}
+
+function saveSession(token, role, user) {
+  state.token = token; state.role = role; state.user = user;
+  localStorage.setItem('smartgap_token', token);
+  localStorage.setItem('smartgap_role',  role);
+  localStorage.setItem('smartgap_user',  JSON.stringify(user));
 }
 
 // ════════════════════════════════════════════════════════
-//  STUDENT DASHBOARD — loads from MongoDB
+//  STUDENT DASHBOARD
 // ════════════════════════════════════════════════════════
 async function loadStudentDashboard() {
-  document.getElementById('s-dash-loading').style.display = 'flex';
-  document.getElementById('s-dash-content').style.display = 'none';
+  show('s-dash-loading'); hide('s-dash-content');
   try {
-    const { student, recentQuizzes, stats } = await api('/student/me');
+    const {student, recentQuizzes, stats} = await api('/student/me');
     state.user = student;
-    const overallColor = stats.overallAvg >= 80 ? 'var(--accent)' : stats.overallAvg >= 60 ? 'var(--primary)' : 'var(--warn)';
-    const physPct  = student.subjects?.physics   || 0;
-    const mathPct  = student.subjects?.math      || 0;
-    const chemPct  = student.subjects?.chemistry || 0;
-    const weakList = (student.weakTopics || []).slice(0, 5);
-
-    const recentRows = recentQuizzes.slice(0, 5).map(q => {
-      const date = new Date(q.takenAt);
-      const ago  = Math.round((Date.now() - date) / 86400000);
-      const agoStr = ago === 0 ? 'Today' : ago === 1 ? '1d ago' : `${ago}d ago`;
-      const tagClass = q.score >= 80 ? 'tag-success' : q.score >= 60 ? 'tag-info' : 'tag-danger';
-      return `<tr><td>${agoStr}</td><td>${q.subject} · ${q.topic}</td><td><span class="tag ${tagClass}">${q.score}%</span></td></tr>`;
-    }).join('') || '<tr><td colspan="3" style="color:var(--text-dim);text-align:center;">No quizzes taken yet</td></tr>';
+    const s   = student.subjects || {};
+    const avg = stats.overallAvg || 0;
+    const oc  = avg>=80?'var(--accent)':avg>=60?'var(--primary)':avg>0?'var(--warn)':'var(--text-muted)';
+    const od  = avg>0 ? avg+'%' : '—';
+    const wl  = (student.weakTopics||[]).slice(0,5);
+    const rr  = (recentQuizzes||[]).slice(0,5).map(q=>{
+      const ago=Math.round((Date.now()-new Date(q.takenAt))/86400000);
+      const tc=q.score>=80?'tag-success':q.score>=60?'tag-info':'tag-danger';
+      return `<tr><td>${ago===0?'Today':ago+'d ago'}</td><td>${q.subject} · ${q.topic}</td><td><span class="tag ${tc}">${q.score}%</span></td><td><span class="ollama-badge" style="font-size:.65rem;">phi3</span></td></tr>`;
+    }).join('')||'<tr><td colspan="4" style="color:var(--text-dim);text-align:center;padding:20px;">No quizzes yet — take your first one! 🚀</td></tr>';
 
     document.getElementById('s-dash-content').innerHTML = `
       <div style="margin-bottom:28px;">
         <h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;">Welcome back, ${student.name} 👋</h1>
-        <p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">${student.grade} · ${student.section}</p>
+        <p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">${student.grade} · ${student.section} · Data from MongoDB</p>
       </div>
       <div class="grid-4" style="margin-bottom:24px;">
-        <div class="stat-card"><div class="stat-label">Overall Score</div><div class="stat-value" style="color:${overallColor};">${stats.overallAvg}%</div><div class="stat-delta">Based on your quizzes</div></div>
-        <div class="stat-card"><div class="stat-label">Quizzes Taken</div><div class="stat-value">${stats.quizzesTaken}</div><div class="stat-delta">From your profile</div></div>
-        <div class="stat-card"><div class="stat-label">Weak Topics</div><div class="stat-value" style="color:var(--warn);">${stats.weakTopicsCount}</div><div class="stat-delta">AI lessons available</div></div>
-        <div class="stat-card"><div class="stat-label">Lessons Done</div><div class="stat-value" style="color:var(--accent);">${stats.lessonsViewed}</div><div class="stat-delta">Keep going!</div></div>
+        <div class="stat-card"><div class="stat-label">Overall Score</div><div class="stat-value" style="color:${oc};">${od}</div><div class="stat-delta">${avg>0?'Your real avg':'Take a quiz first'}</div></div>
+        <div class="stat-card"><div class="stat-label">Quizzes Taken</div><div class="stat-value">${stats.quizzesTaken||0}</div><div class="stat-delta">Stored in DB</div></div>
+        <div class="stat-card"><div class="stat-label">Weak Topics</div><div class="stat-value" style="color:var(--warn);">${stats.weakTopicsCount||0}</div><div class="stat-delta">AI lessons ready</div></div>
+        <div class="stat-card"><div class="stat-label">Lessons Viewed</div><div class="stat-value" style="color:var(--accent);">${stats.lessonsViewed||0}</div></div>
       </div>
       <div class="grid-2" style="margin-bottom:20px;">
         <div class="card">
           <div class="section-title" style="margin-bottom:16px;">Subject Progress</div>
-          ${renderProgressRow('Physics',   physPct)}
-          ${renderProgressRow('Mathematics', mathPct)}
-          ${renderProgressRow('Chemistry', chemPct)}
+          ${pRow('Physics',s.physics||0)}${pRow('Mathematics',s.math||0)}${pRow('Chemistry',s.chemistry||0)}
+          ${!s.physics&&!s.math&&!s.chemistry?'<p style="color:var(--text-dim);font-size:.82rem;margin-top:8px;">Scores appear after you take quizzes.</p>':''}
         </div>
         <div class="card">
           <div class="section-title" style="margin-bottom:14px;">Your Weak Topics</div>
-          ${weakList.length ? weakList.map(wt => `
-            <div class="topic-item">
-              <span class="topic-name">${wt.topic}</span>
-              <div style="display:flex;gap:8px;align-items:center;">
-                <span style="font-family:var(--font-mono);font-size:.78rem;color:var(--danger);">${wt.score}%</span>
-                <span class="tag tag-danger">${wt.subject}</span>
-              </div>
-            </div>`).join('') : `<div style="color:var(--text-muted);font-size:.88rem;padding:8px 0;">🎉 No weak topics! You're doing great.</div>`}
-          ${weakList.length ? `<button class="btn btn-primary btn-sm" style="margin-top:12px;width:100%;justify-content:center;" onclick="showStudentSection('lessons')">View AI Lessons →</button>` : ''}
+          ${wl.length?wl.map(w=>`<div class="topic-item"><span class="topic-name">${w.topic}</span><div style="display:flex;gap:8px;align-items:center;"><span style="font-family:var(--font-mono);font-size:.78rem;color:var(--danger);">${w.score}%</span><span class="tag tag-danger">${w.subject}</span></div></div>`).join(''):'<div style="color:var(--text-muted);font-size:.88rem;padding:8px;">🎉 No weak topics yet. Take a quiz to get personalized insights!</div>'}
+          ${wl.length?`<button class="btn btn-primary btn-sm" style="margin-top:12px;width:100%;justify-content:center;" onclick="showStudentSection('lessons')">View AI Lessons →</button>`:''}
         </div>
       </div>
       <div class="grid-2">
         <div class="card">
           <div class="section-title" style="margin-bottom:14px;">Recent Quiz History</div>
-          <table class="data-table"><thead><tr><th>When</th><th>Topic</th><th>Score</th></tr></thead><tbody>${recentRows}</tbody></table>
+          <table class="data-table"><thead><tr><th>When</th><th>Topic</th><th>Score</th><th>AI</th></tr></thead><tbody>${rr}</tbody></table>
         </div>
         <div class="ai-card" style="display:flex;flex-direction:column;justify-content:center;">
-          <div class="ai-label"><span class="pulse"></span> AI Recommendation</div>
-          ${weakList.length
-            ? `<p style="font-size:.9rem;color:var(--text-muted);margin-bottom:14px;">Focus on <strong style="color:var(--text);">${weakList[0].topic}</strong> this week — your score of ${weakList[0].score}% needs improvement.</p>
-               <button class="btn btn-primary btn-sm" onclick="showStudentSection('quiz')">Take Targeted Quiz →</button>`
-            : `<p style="font-size:.9rem;color:var(--text-muted);">Excellent work! All your topics are strong. Try taking a new quiz to push further.</p>
-               <button class="btn btn-primary btn-sm" onclick="showStudentSection('quiz')">Take a Quiz →</button>`
-          }
+          <div class="ai-label"><span class="pulse"></span> phi3 Recommendation</div>
+          ${wl.length
+            ?`<p style="font-size:.9rem;color:var(--text-muted);margin-bottom:14px;">Focus on <strong style="color:var(--text);">${wl[0].topic}</strong> — your score is ${wl[0].score}%.</p><button class="btn btn-primary btn-sm" onclick="showStudentSection('quiz')">Take Targeted Quiz →</button>`
+            :`<p style="font-size:.9rem;color:var(--text-muted);">Great work — all topics strong! Try a quiz on a new subject.</p><button class="btn btn-primary btn-sm" onclick="showStudentSection('quiz')">Take a Quiz →</button>`}
         </div>
       </div>`;
-
-    document.getElementById('s-dash-loading').style.display = 'none';
-    document.getElementById('s-dash-content').style.display = 'block';
-    animateProgress();
-    loadProgressSection();
-    renderLessonsGrid();
-  } catch (err) {
-    document.getElementById('s-dash-loading').innerHTML = `<p style="color:var(--danger);">Failed to load dashboard: ${err.message}</p>`;
+    hide('s-dash-loading'); show('s-dash-content');
+    animateProg(); loadProgress(); renderLessonsGrid();
+  } catch(e) {
+    document.getElementById('s-dash-loading').innerHTML=`<p style="color:var(--danger);">Failed: ${e.message}<br><small>Is backend running on port 5000?</small></p>`;
   }
 }
 
-function renderProgressRow(label, pct) {
-  const color = pct >= 80 ? 'progress-green' : pct >= 60 ? 'progress-blue' : 'progress-warn';
-  const textColor = pct >= 80 ? 'var(--accent)' : pct >= 60 ? 'var(--primary)' : 'var(--warn)';
-  return `
-    <div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:6px;">
-      <span>${label}</span><span style="color:${textColor};font-family:var(--font-mono);">${pct}%</span>
-    </div>
-    <div class="progress-track" style="height:8px;margin-bottom:14px;">
-      <div class="progress-fill ${color}" style="width:${pct}%;height:8px;" data-width="${pct}"></div>
-    </div>`;
+function pRow(label,pct){
+  const cl=pct>=80?'progress-green':pct>=60?'progress-blue':'progress-warn';
+  const tc=pct>=80?'var(--accent)':pct>=60?'var(--primary)':'var(--warn)';
+  return `<div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:6px;"><span>${label}</span><span style="color:${tc};font-family:var(--font-mono);">${pct}%</span></div><div class="progress-track" style="height:8px;margin-bottom:14px;"><div class="progress-fill ${cl}" style="width:${pct}%;height:8px;" data-w="${pct}"></div></div>`;
 }
 
-function loadProgressSection() {
-  const s = state.user;
-  if (!s) return;
-  const topicRows = (s.topicScores || []).map(ts => {
-    const color = ts.score >= 80 ? 'var(--accent)' : ts.score >= 60 ? 'var(--primary)' : ts.score >= 40 ? 'var(--warn)' : 'var(--danger)';
-    const tag   = ts.score >= 80 ? 'tag-success' : ts.score >= 60 ? 'tag-info' : ts.score >= 40 ? 'tag-warn' : 'tag-danger';
-    return `<tr>
-      <td>${ts.topic}</td>
-      <td><span class="tag tag-info" style="font-size:.7rem;">${ts.subject}</span></td>
-      <td style="color:${color};font-family:var(--font-mono);">${ts.score}%</td>
-      <td>${ts.attempts} attempt${ts.attempts !== 1 ? 's' : ''}</td>
-      <td><span class="tag ${tag}">${ts.score >= 80 ? 'Strong' : ts.score >= 60 ? 'Good' : ts.score >= 40 ? 'Weak' : 'Critical'}</span></td>
-    </tr>`;
-  }).join('') || '<tr><td colspan="5" style="color:var(--text-dim);text-align:center;">Take quizzes to see topic scores</td></tr>';
-
-  document.getElementById('s-progress-content').innerHTML = `
+function loadProgress(){
+  const s=state.user; if(!s)return;
+  const rows=(s.topicScores||[]).map(ts=>{
+    const tc=ts.score>=80?'var(--accent)':ts.score>=60?'var(--primary)':ts.score>=40?'var(--warn)':'var(--danger)';
+    const tg=ts.score>=80?'tag-success':ts.score>=60?'tag-info':ts.score>=40?'tag-warn':'tag-danger';
+    return `<tr><td>${ts.topic}</td><td><span class="tag tag-info" style="font-size:.7rem;">${ts.subject}</span></td><td style="color:${tc};font-family:var(--font-mono);">${ts.score}%</td><td>${ts.attempts}</td><td><span class="tag ${tg}">${ts.score>=80?'Strong':ts.score>=60?'Good':ts.score>=40?'Weak':'Critical'}</span></td></tr>`;
+  }).join('')||'<tr><td colspan="5" style="color:var(--text-dim);text-align:center;">Take quizzes to see scores</td></tr>';
+  const sub=s.subjects||{};
+  document.getElementById('s-progress-content').innerHTML=`
     <div class="grid-4" style="margin-bottom:24px;">
-      <div class="stat-card"><div class="stat-label">Overall</div><div class="stat-value" style="color:var(--primary);">${Math.round(((s.subjects?.physics||0)+(s.subjects?.math||0)+(s.subjects?.chemistry||0))/3)}%</div></div>
-      <div class="stat-card"><div class="stat-label">Physics</div><div class="stat-value">${s.subjects?.physics||0}%</div></div>
-      <div class="stat-card"><div class="stat-label">Math</div><div class="stat-value" style="color:var(--accent);">${s.subjects?.math||0}%</div></div>
-      <div class="stat-card"><div class="stat-label">Chemistry</div><div class="stat-value" style="color:var(--warn);">${s.subjects?.chemistry||0}%</div></div>
+      <div class="stat-card"><div class="stat-label">Overall</div><div class="stat-value" style="color:var(--primary);">${Math.round(((sub.physics||0)+(sub.math||0)+(sub.chemistry||0))/3)}%</div></div>
+      <div class="stat-card"><div class="stat-label">Physics</div><div class="stat-value">${sub.physics||0}%</div></div>
+      <div class="stat-card"><div class="stat-label">Math</div><div class="stat-value" style="color:var(--accent);">${sub.math||0}%</div></div>
+      <div class="stat-card"><div class="stat-label">Chemistry</div><div class="stat-value" style="color:var(--warn);">${sub.chemistry||0}%</div></div>
     </div>
-    <div class="card">
-      <div class="section-title" style="margin-bottom:16px;">All Topic Scores</div>
-      <table class="data-table">
-        <thead><tr><th>Topic</th><th>Subject</th><th>Score</th><th>Attempts</th><th>Status</th></tr></thead>
-        <tbody>${topicRows}</tbody>
-      </table>
+    <div class="card"><div class="section-title" style="margin-bottom:16px;">All Topic Scores (from MongoDB)</div>
+      <table class="data-table"><thead><tr><th>Topic</th><th>Subject</th><th>Score</th><th>Attempts</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table>
     </div>`;
 }
 
-function renderLessonsGrid() {
-  const weakTopics = state.user?.weakTopics || [];
-  const lessonIcons = { "Newton's Third Law": "⚡", "Free Body Diagram": "📐", "Momentum": "🎯", "Electronegativity": "🔬", "Periodic Table": "🧪", "Atomic Radius": "⚛️", "Quadratic Equations": "📐", "Discriminant": "📊", "default": "📚" };
-
-  const cards = weakTopics.length ? weakTopics.map(wt => {
-    const icon = lessonIcons[wt.topic] || lessonIcons.default;
-    const tagClass = wt.score < 50 ? 'tag-danger' : 'tag-warn';
-    const tagText  = wt.score < 50 ? 'Critical Gap' : 'Needs Practice';
-    return `
-      <div class="card" style="cursor:pointer;" onclick="viewLesson('${wt.topic}','${wt.subject}')">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
-          <div style="font-size:1.8rem;">${icon}</div>
-          <div><div style="font-family:var(--font-display);font-weight:700;">${wt.topic}</div><div style="font-size:.78rem;color:var(--text-muted);">${wt.subject}</div></div>
-        </div>
-        <span class="tag ${tagClass}">${tagText} · ${wt.score}%</span>
-        <div style="margin-top:12px;font-size:.82rem;color:var(--text-muted);">AI lesson + practice questions ready</div>
-        <button class="btn btn-primary btn-sm" style="margin-top:12px;width:100%;justify-content:center;">View Lesson →</button>
-      </div>`;
-  }).join('') : `
-    <div class="ai-card" style="grid-column:1/-1;text-align:center;padding:40px;">
-      <div style="font-size:2.5rem;margin-bottom:12px;">🎉</div>
-      <div style="font-family:var(--font-display);font-weight:700;font-size:1.1rem;margin-bottom:8px;">No weak topics!</div>
-      <p style="color:var(--text-muted);margin-bottom:16px;">Take a quiz to generate AI lessons for your weak areas.</p>
-      <button class="btn btn-primary" onclick="showStudentSection('quiz')">Take a Quiz →</button>
+function renderLessonsGrid(){
+  const weak=state.user?.weakTopics||[];
+  const icons={"Newton's Third Law":"⚡","Free Body Diagram":"📐","Momentum":"🎯","Electronegativity":"🔬","Atomic Radius":"⚛️","Quadratic Equations":"📐","Discriminant":"📊","default":"📚"};
+  const cards=weak.length?weak.map(w=>{
+    const icon=icons[w.topic]||icons.default;
+    const tg=w.score<50?'tag-danger':'tag-warn';
+    return `<div class="card" style="cursor:pointer;" onclick="viewLesson('${escQ(w.topic)}','${escQ(w.subject)}')">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;"><div style="font-size:1.8rem;">${icon}</div><div><div style="font-family:var(--font-display);font-weight:700;">${w.topic}</div><div style="font-size:.78rem;color:var(--text-muted);">${w.subject}</div></div></div>
+      <span class="tag ${tg}">${w.score<50?'Critical Gap':'Needs Practice'} · ${w.score}%</span>
+      <div style="margin-top:10px;font-size:.78rem;color:var(--text-dim);">phi3 lesson · cached in MongoDB</div>
+      <button class="btn btn-primary btn-sm" style="margin-top:12px;width:100%;justify-content:center;">View Lesson →</button>
     </div>`;
-
-  document.getElementById('lessons-grid').innerHTML = `<div class="grid-2">${cards}</div>`;
+  }).join(''):`<div class="ai-card" style="grid-column:1/-1;text-align:center;padding:40px;"><div style="font-size:2.5rem;margin-bottom:12px;">🎉</div><div style="font-family:var(--font-display);font-weight:700;font-size:1.1rem;margin-bottom:8px;">No weak topics yet!</div><p style="color:var(--text-muted);margin-bottom:16px;">Take a quiz to generate personalized AI lessons.</p><button class="btn btn-primary" onclick="showStudentSection('quiz')">Take a Quiz →</button></div>`;
+  document.getElementById('lessons-grid').innerHTML=`<div class="grid-2">${cards}</div>`;
 }
 
-// ════════════════════════════════════════════════════════
-//  SIDEBAR NAV
-// ════════════════════════════════════════════════════════
-function showStudentSection(id) {
-  ['dashboard','quiz','lessons','progress'].forEach(s => {
-    const el = document.getElementById('s-section-' + s);
-    if (el) el.style.display = s === id ? 'block' : 'none';
-    const bar = document.getElementById('sbar-' + s);
-    if (bar) bar.classList.toggle('active', s === id);
+function showStudentSection(id){
+  ['dashboard','quiz','lessons','progress'].forEach(s=>{
+    const el=document.getElementById('s-section-'+s);
+    const bar=document.getElementById('sbar-'+s);
+    if(el) el.style.display=s===id?'block':'none';
+    if(bar) bar.classList.toggle('active',s===id);
   });
-  if (id === 'lessons') {
-    document.getElementById('lessons-grid').style.display = 'block';
-    document.getElementById('lesson-view-inner').style.display = 'none';
-  }
-}
-
-function showTeacherSection(id) {
-  ['dashboard','upload','analytics','students','insights'].forEach(s => {
-    const el = document.getElementById('t-section-' + s);
-    if (el) el.style.display = s === id ? 'block' : 'none';
-    const bar = document.getElementById('tbar-' + s);
-    if (bar) bar.classList.toggle('active', s === id);
-  });
-  if (id === 'analytics' && state.teacherData) renderTeacherAnalytics();
-  if (id === 'students'  && state.teacherData) renderTeacherStudents();
-  if (id === 'insights'  && state.teacherData) renderTeacherInsightsSection();
-  if (id === 'upload')                          renderUploadSection();
+  if(id==='quiz') renderQuizSelector();
 }
 
 // ════════════════════════════════════════════════════════
-//  TEACHER DASHBOARD — loads from MongoDB
+//  QUIZ FLOW
 // ════════════════════════════════════════════════════════
-async function loadTeacherDashboard() {
-  document.getElementById('t-dash-loading').style.display = 'flex';
-  document.getElementById('t-dash-content').style.display = 'none';
-  try {
-    const data = await api('/teacher/dashboard');
-    state.teacherData = data;
-    const { teacher, classStats, weakClassTopics, strongClassTopics, atRiskStudents } = data;
-
-    const weakRows = weakClassTopics.slice(0, 6).map(t => {
-      const incorrectPct = 100 - t.correctPct;
-      const tag = incorrectPct >= 50 ? 'tag-danger' : 'tag-warn';
-      return `<div class="topic-item"><span class="topic-name">${t.topic}</span><span class="tag ${tag}">${incorrectPct}% incorrect</span></div>`;
-    }).join('') || '<div style="color:var(--text-muted);font-size:.85rem;">No weak topics — great class!</div>';
-
-    const atRiskRows = atRiskStudents.slice(0, 5).map(s =>
-      `<div class="topic-item"><span class="topic-name">${s.name}</span><span class="tag tag-danger">${s.avg}%</span></div>`
-    ).join('') || '<div style="color:var(--accent);font-size:.85rem;">No at-risk students 🎉</div>';
-
-    document.getElementById('t-dash-content').innerHTML = `
-      <div style="margin-bottom:28px;">
-        <h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;">Class Overview</h1>
-        <p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">${teacher.subject} · ${teacher.grade} · ${teacher.section}</p>
-      </div>
-      <div class="grid-4" style="margin-bottom:24px;">
-        <div class="stat-card"><div class="stat-label">Class Average</div><div class="stat-value" style="color:var(--primary);">${classStats.classAvg}%</div><div class="stat-delta">Across all subjects</div></div>
-        <div class="stat-card"><div class="stat-label">Students</div><div class="stat-value">${classStats.totalStudents}</div><div class="stat-delta">${classStats.atRiskCount} at risk</div></div>
-        <div class="stat-card"><div class="stat-label">Quizzes Given</div><div class="stat-value">${classStats.quizzesGiven}</div></div>
-        <div class="stat-card"><div class="stat-label">Weak Topics</div><div class="stat-value" style="color:var(--warn);">${classStats.weakTopicsCount}</div><div class="stat-delta">AI suggestions ready</div></div>
-      </div>
-      <div class="grid-2" style="margin-bottom:20px;">
-        <div class="card"><div class="section-title" style="margin-bottom:14px;">Class Weak Topics</div>${weakRows}</div>
-        <div class="card"><div class="section-title" style="margin-bottom:14px;">At-Risk Students</div>${atRiskRows}<button class="btn btn-ghost btn-sm" style="margin-top:12px;" onclick="showTeacherSection('students')">View All Students →</button></div>
-      </div>
-      <div class="ai-card">
-        <div class="ai-label"><span class="pulse"></span> AI Teaching Insight</div>
-        <p style="font-size:.9rem;color:var(--text-muted);margin-bottom:16px;">
-          ${weakClassTopics.length
-            ? `${weakClassTopics[0] ? Math.round(100 - weakClassTopics[0].correctPct) : 0}% of your students are struggling with <strong style="color:var(--text);">${weakClassTopics[0]?.topic || 'key concepts'}</strong>. Consider using visual simulation tools next class.`
-            : 'Your class is performing well across all topics!'
-          }
-        </p>
-        <button class="btn btn-primary btn-sm" onclick="showTeacherSection('insights')">Get Full AI Insights →</button>
-      </div>`;
-
-    document.getElementById('t-dash-loading').style.display = 'none';
-    document.getElementById('t-dash-content').style.display = 'block';
-    animateProgress();
-  } catch (err) {
-    document.getElementById('t-dash-loading').innerHTML = `<p style="color:var(--danger);">Failed to load: ${err.message}<br><small>Make sure the backend is running on port 5000.</small></p>`;
-  }
+function renderQuizSelector(){
+  document.getElementById('quiz-selector').innerHTML=`
+    <div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;">Assigned Quizzes</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">Quizzes assigned by your teacher · attempts saved to MongoDB</p></div>
+    <div id="assigned-quiz-list"><div class="loader"><div class="spinner"></div><p>Loading assigned quizzes…</p></div></div>`;
+  hide('quiz-active'); show('quiz-selector');
+  loadAssignedQuizzes();
 }
 
-function renderTeacherAnalytics() {
-  const data = state.teacherData;
-  const allTopics = [...(data.weakClassTopics || []), ...(data.strongClassTopics || [])].sort((a,b) => b.correctPct - a.correctPct);
-  const rows = allTopics.map(t => {
-    const barClass = t.correctPct >= 80 ? 'progress-green' : t.correctPct >= 60 ? 'progress-blue' : 'progress-warn';
-    return `
-      <div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:6px;">
-        <span>${t.topic} <span style="color:var(--text-dim);font-size:.75rem;">(${t.subject})</span></span>
-        <span style="font-family:var(--font-mono);color:${t.correctPct>=80?'var(--accent)':t.correctPct>=60?'var(--primary)':'var(--danger)'};">${t.correctPct}% correct</span>
-      </div>
-      <div class="progress-track" style="height:10px;margin-bottom:14px;"><div class="progress-fill ${barClass}" style="width:${t.correctPct}%;height:10px;" data-width="${t.correctPct}"></div></div>`;
-  }).join('');
-  document.getElementById('t-section-analytics').innerHTML = `
-    <div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;">Class Analytics</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">Topic-level performance for ${data.classStats.totalStudents} students.</p></div>
-    <div class="card">${rows || '<p style="color:var(--text-muted);">No data yet.</p>'}</div>`;
-  animateProgress();
-}
-
-function renderTeacherStudents() {
-  const students = state.teacherData?.students || [];
-  const rows = students.map(s => {
-    const tag = s.avg >= 80 ? 'tag-success' : s.avg >= 65 ? 'tag-info' : s.avg >= 50 ? 'tag-warn' : 'tag-danger';
-    const status = s.avg >= 80 ? 'Strong' : s.avg >= 65 ? 'Good' : s.avg >= 50 ? 'Needs Work' : 'At Risk';
-    return `<tr>
-      <td>${s.name}</td>
-      <td style="font-family:var(--font-mono);font-size:.8rem;color:var(--text-muted);">${s.studentId}</td>
-      <td style="color:var(--primary);">${s.subjects?.physics||0}%</td>
-      <td style="color:var(--accent);">${s.subjects?.math||0}%</td>
-      <td style="color:var(--warn);">${s.subjects?.chemistry||0}%</td>
-      <td><strong>${s.avg}%</strong></td>
-      <td>${s.quizzesTaken}</td>
-      <td><span class="tag ${tag}">${status}</span></td>
-    </tr>`;
-  }).join('');
-  document.getElementById('t-section-students').innerHTML = `
-    <div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;">Student Performance</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">Individual analytics for all ${students.length} students — live from MongoDB.</p></div>
-    <div class="card" style="overflow-x:auto;">
-      <table class="data-table">
-        <thead><tr><th>Name</th><th>ID</th><th>Physics</th><th>Math</th><th>Chemistry</th><th>Overall</th><th>Quizzes</th><th>Status</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-    </div>`;
-}
-
-function renderTeacherInsightsSection() {
-  const data = state.teacherData;
-  document.getElementById('t-section-insights').innerHTML = `
-    <div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;">AI Teaching Insights</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">Recommendations based on live class data.</p></div>
-    <div id="t-insight-static">
-      <button class="btn btn-accent" style="margin-bottom:24px;" onclick="generateTeacherInsights()">⚡ Generate Fresh AI Insights</button>
-      ${(data.weakClassTopics||[]).slice(0,3).map((t,i) => `
-        <div class="ai-card" style="margin-bottom:16px;">
-          <div class="ai-label"><span class="pulse"></span> Insight ${i+1} – ${t.topic}</div>
-          <p style="font-size:.9rem;color:var(--text-muted);">${Math.round(100-t.correctPct)}% of students are struggling with <strong style="color:var(--text);">${t.topic}</strong> in ${t.subject}. This is a high-priority topic requiring immediate attention.</p>
-        </div>`).join('') || '<div class="ai-card"><div class="ai-label"><span class="pulse"></span> All Good!</div><p style="color:var(--text-muted);">No major weak spots detected.</p></div>'}
-    </div>
-    <div id="t-insight-ai" style="margin-top:20px;"></div>`;
-}
-
-async function generateTeacherInsights() {
-  const data = state.teacherData;
-  const btn = document.querySelector('#t-section-insights .btn-accent');
-  if (btn) { btn.disabled = true; btn.textContent = '⏳ Generating…'; }
-  document.getElementById('t-insight-ai').innerHTML = `<div class="loading-overlay"><div class="spinner"></div><p>Generating AI teaching recommendations…</p></div>`;
-  try {
-    const classInfo = (data.weakClassTopics||[]).map(t => `${t.topic} (${t.subject}): ${Math.round(100-t.correctPct)}% incorrect`).join(', ');
-    const prompt = `You are EduInsight's AI teaching assistant.
-Class data (${data.classStats.totalStudents} students, avg ${data.classStats.classAvg}%):
-Weak topics: ${classInfo || 'None'}
-At-risk students: ${data.classStats.atRiskCount}
-Give 3 concrete actionable teaching insights. Respond ONLY as JSON array (no markdown):
-[{"topic":"topic","insight":"2-3 sentences","recommendation":"specific action","urgency":"high|medium|low"},...]`;
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 900, messages: [{ role: 'user', content: prompt }] })
-    });
-    const d = await res.json();
-    const text = d.content.map(c => c.text||'').join('').replace(/```json|```/g,'').trim();
-    const insights = JSON.parse(text);
-    const colors = { high: 'var(--danger)', medium: 'var(--warn)', low: 'var(--accent)' };
-    document.getElementById('t-insight-ai').innerHTML = `
-      <div style="font-family:var(--font-display);font-size:1rem;font-weight:700;margin-bottom:16px;">✨ Fresh AI Insights (based on live DB data)</div>
-      ${insights.map((ins,i) => `
-        <div class="ai-card" style="margin-bottom:14px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-            <div class="ai-label"><span class="pulse"></span> ${i+1}. ${ins.topic}</div>
-            <span style="font-size:.7rem;font-weight:700;color:${colors[ins.urgency]};text-transform:uppercase;">${ins.urgency}</span>
+async function loadAssignedQuizzes(){
+  try{
+    const {assignments}=await api('/student/assigned-quizzes');
+    const el=document.getElementById('assigned-quiz-list');
+    if(!assignments||assignments.length===0){
+      el.innerHTML=`<div class="ai-card" style="text-align:center;padding:48px;"><div style="font-size:2.5rem;margin-bottom:12px;">📭</div><div style="font-family:var(--font-display);font-weight:700;font-size:1.1rem;margin-bottom:8px;">No quizzes assigned yet</div><p style="color:var(--text-muted);">Your teacher hasn't assigned any quizzes yet. Check back later!</p></div>`;
+      return;
+    }
+    el.innerHTML=`<div class="grid-2">${assignments.map(a=>{
+      const diffTag=a.difficulty==='hard'?'tag-danger':a.difficulty==='easy'?'tag-success':'tag-info';
+      const due=a.dueDate?`<div style="font-size:.76rem;color:var(--warn);margin-top:6px;">📅 Due: ${new Date(a.dueDate).toLocaleDateString()}</div>`:'';
+      if(a.attempted){
+        const sc=a.attemptScore>=80?'var(--accent)':a.attemptScore>=60?'var(--primary)':'var(--danger)';
+        return `<div class="card" style="border-color:rgba(52,211,153,.25);">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+            <div><div style="font-family:var(--font-display);font-weight:700;margin-bottom:4px;">${a.title}</div><div style="font-size:.78rem;color:var(--text-muted);">${a.subject} · ${a.topic}</div></div>
+            <span class="tag tag-success">✓ Done</span>
           </div>
-          <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:10px;">${ins.insight}</p>
-          <div style="font-size:.82rem;background:rgba(96,165,250,.07);border-radius:6px;padding:10px 12px;"><strong>Recommendation:</strong> ${ins.recommendation}</div>
-        </div>`).join('')}`;
-  } catch (e) {
-    document.getElementById('t-insight-ai').innerHTML = `<p style="color:var(--danger);">AI generation failed: ${e.message}</p>`;
-  } finally {
-    if (btn) { btn.disabled = false; btn.textContent = '⚡ Generate Fresh AI Insights'; }
+          ${due}
+          ${a.instructions?`<div style="font-size:.8rem;color:var(--text-dim);margin-top:8px;padding:8px 10px;background:var(--surface2);border-radius:6px;">${a.instructions}</div>`:''}
+          <div style="margin-top:14px;text-align:center;padding:10px;background:var(--surface2);border-radius:8px;">
+            <div style="font-family:var(--font-display);font-size:2rem;font-weight:800;color:${sc};">${a.attemptScore}%</div>
+            <div style="font-size:.75rem;color:var(--text-muted);">Score · ${new Date(a.attemptDate).toLocaleDateString()}</div>
+          </div>
+          <div style="margin-top:10px;font-size:.75rem;color:var(--text-dim);text-align:center;">Each quiz can only be submitted once</div>
+        </div>`;
+      }
+      return `<div class="card" style="cursor:default;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+          <div><div style="font-family:var(--font-display);font-weight:700;margin-bottom:4px;">${a.title}</div><div style="font-size:.78rem;color:var(--text-muted);">${a.subject} · ${a.topic}</div></div>
+          <span class="tag tag-warn">Pending</span>
+        </div>
+        ${due}
+        ${a.instructions?`<div style="font-size:.8rem;color:var(--text-dim);margin-top:8px;padding:8px 10px;background:var(--surface2);border-radius:6px;margin-bottom:8px;">${a.instructions}</div>`:''}
+        <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+          <span class="tag tag-info" style="font-size:.7rem;">${a.difficulty||'medium'}</span>
+          <span class="tag" style="font-size:.7rem;background:rgba(96,165,250,.08);color:var(--text-muted);border:1px solid var(--border);">phi3 generated</span>
+        </div>
+        <button class="btn btn-accent" style="margin-top:14px;width:100%;justify-content:center;" onclick="startAssignedQuiz('${a.quizId}','${escQ(a.title)}')">Start Quiz →</button>
+      </div>`;
+    }).join('')}</div>`;
+  }catch(e){
+    document.getElementById('assigned-quiz-list').innerHTML=`<div class="error-box show">Failed to load quizzes: ${e.message}</div>`;
   }
 }
 
-function renderUploadSection() {
-  document.getElementById('t-section-upload').innerHTML = `
-    <div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;">Upload Quiz</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">Create a new quiz for your students.</p></div>
-    <div class="card" style="max-width:600px;">
-      <div class="grid-2">
-        <div class="input-group"><label>Subject</label><select class="input-field" id="up-subject"><option>Physics</option><option>Mathematics</option><option>Chemistry</option></select></div>
-        <div class="input-group"><label>Topic</label><input class="input-field" id="up-topic" placeholder="e.g. Laws of Motion" value="Laws of Motion"></div>
-      </div>
-      <div class="input-group"><label>Quiz Title</label><input class="input-field" id="up-title" placeholder="Quiz name" value="Chapter 4 Assessment – Laws of Motion"></div>
-      <div class="input-group"><label>Lecture Notes (optional, for AI context)</label><textarea class="input-field" id="up-notes" rows="4" placeholder="Paste lecture notes…">Newton's Laws: First law - inertia. Second law - F=ma. Third law - action-reaction pairs.</textarea></div>
-      <div class="input-group"><label>Number of Questions</label><input class="input-field" id="up-count" type="number" value="10" min="1" max="50"></div>
-      <button class="btn btn-primary" onclick="uploadQuiz()">Upload Quiz →</button>
-    </div>`;
-}
-
-async function uploadQuiz() {
-  try {
-    const body = {
-      subject: document.getElementById('up-subject').value,
-      topic:   document.getElementById('up-topic').value,
-      title:   document.getElementById('up-title').value,
-      notes:   document.getElementById('up-notes').value,
-      questionCount: parseInt(document.getElementById('up-count').value),
-    };
-    await api('/teacher/upload-quiz', 'POST', body);
-    notify('Quiz uploaded successfully! Students can now take it.', 'success');
-    loadTeacherDashboard();
-  } catch (err) {
-    notify('Upload failed: ' + err.message, 'error');
+async function startAssignedQuiz(quizId, title){
+  hide('quiz-selector');
+  document.getElementById('quiz-active').style.display='block';
+  document.getElementById('quiz-active').innerHTML=`<div class="loader"><div class="spinner"></div><p>Loading quiz…</p><small>${title}</small></div>`;
+  try{
+    const{quiz}=await api('/quiz/'+quizId);
+    state.currentQuiz=quiz; state.quizAnswers=new Array(quiz.questions.length).fill(null); state.currentQuestion=0;
+    renderQuestion();
+    notify('Quiz loaded. Good luck! 🎯','success');
+  }catch(e){
+    document.getElementById('quiz-active').innerHTML=`<div class="card" style="text-align:center;padding:40px;"><div style="font-size:2rem;margin-bottom:12px;">❌</div><p style="color:var(--danger);">${e.message}</p><button class="btn btn-ghost" style="margin-top:16px;" onclick="renderQuizSelector()">← Back</button></div>`;
   }
 }
 
-// ════════════════════════════════════════════════════════
-//  QUIZ ENGINE
-// ════════════════════════════════════════════════════════
-const QUIZZES = {
-  Physics: {
-    'Laws of Motion': { questions: [
-      { q:"What does Newton's First Law state?", options:["Objects accelerate when force applied","An object stays at rest/motion unless acted on by net force","Force = mass × acceleration","For every action there's an equal opposite reaction"], answer:1, concept:"Newton's First Law" },
-      { q:"A 10 kg box is pushed with 50 N. What is its acceleration?", options:["5 m/s²","10 m/s²","0.2 m/s²","500 m/s²"], answer:0, concept:"Newton's Second Law" },
-      { q:"When you push a wall and the wall pushes back equally, this is Newton's ___", options:["First Law","Second Law","Third Law","Law of Gravitation"], answer:2, concept:"Newton's Third Law" },
-      { q:"A free body diagram shows:", options:["Only gravitational forces","All forces acting on an object","The path of motion","Mass and velocity only"], answer:1, concept:"Free Body Diagram" },
-      { q:"A rocket expelling gas backward moving forward is an example of:", options:["Newton's 1st Law","Newton's 2nd Law","Newton's 3rd Law","Inertia"], answer:2, concept:"Newton's Third Law" },
-      { q:"Normal force in a free body diagram is represented by:", options:["Downward arrow","Horizontal arrow","Arrow perpendicular to surface (upward)","Arrow in direction of motion"], answer:2, concept:"Free Body Diagram" },
-      { q:"Momentum is defined as:", options:["Force × Time","Mass × Velocity","Mass × Acceleration","Force × Distance"], answer:1, concept:"Momentum" },
-      { q:"The unit of momentum is:", options:["Newton (N)","Joule (J)","kg·m/s","m/s²"], answer:2, concept:"Momentum" },
-      { q:"Inertia is the tendency of an object to:", options:["Accelerate when force applied","Resist changes in its state of motion","Move in a circular path","Fall under gravity"], answer:1, concept:"Newton's First Law" },
-      { q:"Two skaters push off. Skater A (60kg) moves at 2m/s. Skater B (30kg) moves at:", options:["2 m/s","4 m/s","1 m/s","3 m/s"], answer:1, concept:"Newton's Third Law" },
-    ]},
-    'Thermodynamics': { questions: [
-      { q:"The First Law of Thermodynamics states:", options:["Entropy always increases","Energy is conserved","Heat flows from cold to hot","Temperature is constant"], answer:1, concept:"First Law" },
-      { q:"Heat naturally flows from:", options:["Cold to hot","Hot to cold","Random direction","Depends on pressure"], answer:1, concept:"Second Law" },
-      { q:"Absolute zero in Celsius is:", options:["0°C","-100°C","0 K","-273.15°C"], answer:3, concept:"Temperature" },
-      { q:"In an isothermal process:", options:["Pressure is constant","Volume is constant","Temperature is constant","No heat is exchanged"], answer:2, concept:"Processes" },
-      { q:"Entropy is a measure of:", options:["Energy","Temperature","Disorder/randomness","Pressure"], answer:2, concept:"Entropy" },
-      { q:"Heat engine efficiency =", options:["Work output / Heat input","Heat input / Work output","Temperature / Pressure","Entropy × Volume"], answer:0, concept:"Heat Engine" },
-      { q:"Conduction transfers heat through:", options:["Fluid movement","Electromagnetic waves","Direct particle contact","Vacuum"], answer:2, concept:"Heat Transfer" },
-      { q:"A Carnot engine is:", options:["Most efficient theoretical engine","A real-world engine","A coal engine","A type of refrigerator"], answer:0, concept:"Carnot Engine" },
-      { q:"When gas expands adiabatically, temperature:", options:["Increases","Decreases","Stays same","Doubles"], answer:1, concept:"Adiabatic Process" },
-      { q:"Specific heat capacity is energy to raise 1 kg by:", options:["1 Kelvin","100°C","1 Joule","1 watt"], answer:0, concept:"Heat Capacity" },
-    ]},
-  },
-  Mathematics: {
-    'Algebra': { questions: [
-      { q:"Solve: 2x + 6 = 14", options:["x = 4","x = 10","x = 7","x = 3"], answer:0, concept:"Linear Equations" },
-      { q:"The quadratic formula is:", options:["x = -b ± √(b²-4ac) / 2a","x = b ± √(b²+4ac) / 2a","x = -b / 2a","x = a ± √b / c"], answer:0, concept:"Quadratic Formula" },
-      { q:"Factor: x² - 9", options:["(x-3)(x-3)","(x+3)(x-3)","(x+9)(x-1)","(x-1)(x+9)"], answer:1, concept:"Factoring" },
-      { q:"If f(x) = 2x + 3, then f(5) =", options:["13","10","16","8"], answer:0, concept:"Functions" },
-      { q:"Slope-intercept form of a line:", options:["ax + by = c","y = mx + b","x = my + b","(y-y1)=m(x-x1)"], answer:1, concept:"Linear Functions" },
-      { q:"Simplify: 3x² + 5x - 2x² + x", options:["x² + 6x","5x² + 6x","x² + 4x","5x² + 4x"], answer:0, concept:"Simplification" },
-      { q:"Solve: x² - 5x + 6 = 0", options:["x=2,3","x=-2,-3","x=1,6","x=-1,-6"], answer:0, concept:"Quadratic Equations" },
-      { q:"Y-intercept of y = 3x - 7:", options:["3","-7","7","0"], answer:1, concept:"Linear Functions" },
-      { q:"If 3x = 12, then x =", options:["4","9","36","3"], answer:0, concept:"Linear Equations" },
-      { q:"The discriminant of ax²+bx+c=0 is:", options:["b²+4ac","b²-4ac","√(b²-4ac)","-b/2a"], answer:1, concept:"Discriminant" },
-    ]},
-  },
-  Chemistry: {
-    'Periodic Table': { questions: [
-      { q:"How many elements are in the periodic table?", options:["108","118","92","100"], answer:1, concept:"Periodic Table Basics" },
-      { q:"The atomic number represents:", options:["Number of neutrons","Number of protons","Atomic mass","Outer shell electrons"], answer:1, concept:"Atomic Number" },
-      { q:"Noble gases are in group:", options:["1","7","17","18"], answer:3, concept:"Groups" },
-      { q:"Which element has symbol 'Fe'?", options:["Fluorine","Francium","Iron","Fermium"], answer:2, concept:"Element Symbols" },
-      { q:"The most electronegative element is:", options:["Oxygen","Chlorine","Fluorine","Nitrogen"], answer:2, concept:"Electronegativity" },
-      { q:"Isotopes have the same:", options:["Mass number","Neutrons","Atomic number","Atomic mass"], answer:2, concept:"Isotopes" },
-      { q:"Elements in same group have similar:", options:["Atomic masses","Electron shells","Chemical properties","Densities"], answer:2, concept:"Periodicity" },
-      { q:"Atomic radius increases going:", options:["Right across period","Up a group","Down a group","Left across period"], answer:2, concept:"Atomic Radius" },
-      { q:"Alkali metals are in group:", options:["2","1","17","18"], answer:1, concept:"Groups" },
-      { q:"Molar mass of H₂O is:", options:["16 g/mol","18 g/mol","20 g/mol","14 g/mol"], answer:1, concept:"Molar Mass" },
-    ]},
-  },
-};
-
-function updateTopics() {
-  const subject = document.getElementById('quiz-subject').value;
-  const topicSel = document.getElementById('quiz-topic');
-  topicSel.innerHTML = '';
-  const topics = QUIZZES[subject] || {};
-  Object.keys(topics).forEach(t => {
-    const o = document.createElement('option'); o.value = t; o.textContent = t; topicSel.appendChild(o);
-  });
-}
-
-function startQuiz() {
-  const subject = document.getElementById('quiz-subject').value;
-  const topic   = document.getElementById('quiz-topic').value;
-  const quizData = QUIZZES[subject]?.[topic];
-  if (!quizData) return notify('Quiz not found.', 'error');
-  state.currentQuiz = { ...quizData, subject, topic };
-  state.quizAnswers  = new Array(quizData.questions.length).fill(null);
-  state.currentQuestion = 0;
-  document.getElementById('quiz-selector').style.display = 'none';
-  document.getElementById('quiz-active').style.display   = 'block';
-  renderQuestion();
-}
-
-function renderQuestion() {
-  const qs = state.currentQuiz.questions;
-  const i  = state.currentQuestion;
-  const dots = qs.map((_,idx) => `<div class="quiz-dot ${idx<i?'done':idx===i?'current':''}"></div>`).join('');
-  document.getElementById('quiz-active').innerHTML = `
+function renderQuestion(){
+  const qs=state.currentQuiz.questions, i=state.currentQuestion;
+  const dots=qs.map((_,idx)=>`<div class="quiz-dot ${idx<i?'done':idx===i?'current':''}"></div>`).join('');
+  document.getElementById('quiz-active').innerHTML=`
     <div style="margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;">
-      <div><div class="section-title">${state.currentQuiz.subject} · ${state.currentQuiz.topic}</div><div style="font-size:.78rem;color:var(--text-muted);margin-top:2px;">Question ${i+1} of ${qs.length}</div></div>
-      <button class="btn btn-ghost btn-sm" onclick="cancelQuiz()">Cancel</button>
+      <div><div class="section-title">${state.currentQuiz.subject} · ${state.currentQuiz.topic}</div><div style="display:flex;gap:8px;align-items:center;margin-top:4px;"><div style="font-size:.78rem;color:var(--text-muted);">Q ${i+1}/${qs.length}</div><span class="ollama-badge" style="font-size:.65rem;">phi3 generated</span></div></div>
+      <button class="btn btn-ghost btn-sm" onclick="renderQuizSelector()">Cancel</button>
     </div>
     <div class="quiz-progress">${dots}</div>
     <div class="card" style="margin-bottom:20px;">
-      <div style="font-family:var(--font-display);font-size:1rem;font-weight:600;line-height:1.5;margin-bottom:20px;">${i+1}. ${qs[i].q}</div>
-      ${qs[i].options.map((opt,oi) => `
-        <div class="quiz-option ${state.quizAnswers[i]===oi?'selected':''}" onclick="selectAnswer(${oi})">
-          <div class="option-key">${['A','B','C','D'][oi]}</div><span>${opt}</span>
-        </div>`).join('')}
+      <div style="font-family:var(--font-display);font-size:1rem;font-weight:600;line-height:1.5;margin-bottom:20px;">${i+1}. ${qs[i].question}</div>
+      ${qs[i].options.map((opt,oi)=>`<div class="quiz-option ${state.quizAnswers[i]===oi?'selected':''}" onclick="selectAns(${oi})"><div class="option-key">${['A','B','C','D'][oi]}</div><span>${opt}</span></div>`).join('')}
     </div>
     <div style="display:flex;gap:10px;justify-content:flex-end;">
-      ${i>0 ? `<button class="btn btn-ghost" onclick="prevQ()">← Prev</button>` : ''}
-      ${i < qs.length-1
-        ? `<button class="btn btn-primary" onclick="nextQ()" ${state.quizAnswers[i]===null?'disabled':''}>Next →</button>`
-        : `<button class="btn btn-accent" onclick="submitQuiz()" ${state.quizAnswers[i]===null?'disabled':''}>Submit ✓</button>`}
+      ${i>0?`<button class="btn btn-ghost" onclick="prevQ()">← Prev</button>`:''}
+      ${i<qs.length-1?`<button class="btn btn-primary" onclick="nextQ()" ${state.quizAnswers[i]===null?'disabled':''}>Next →</button>`:`<button class="btn btn-accent" onclick="submitQuiz()" ${state.quizAnswers[i]===null?'disabled':''}>Submit ✓</button>`}
     </div>`;
 }
 
-function selectAnswer(idx) { state.quizAnswers[state.currentQuestion] = idx; renderQuestion(); }
-function nextQ() { if (state.currentQuestion < state.currentQuiz.questions.length-1) { state.currentQuestion++; renderQuestion(); } }
-function prevQ() { if (state.currentQuestion > 0) { state.currentQuestion--; renderQuestion(); } }
-function cancelQuiz() { document.getElementById('quiz-selector').style.display='block'; document.getElementById('quiz-active').style.display='none'; }
+function selectAns(idx){state.quizAnswers[state.currentQuestion]=idx;renderQuestion();}
+function nextQ(){if(state.currentQuestion<state.currentQuiz.questions.length-1){state.currentQuestion++;renderQuestion();}}
+function prevQ(){if(state.currentQuestion>0){state.currentQuestion--;renderQuestion();}}
 
-async function submitQuiz() {
+async function submitQuiz(){
   goto('quiz-results');
-  const quiz    = state.currentQuiz;
-  const answers = state.quizAnswers;
-  let correct = 0;
-  const answerPayload = quiz.questions.map((q, i) => {
-    const isCorrect = answers[i] === q.answer;
-    if (isCorrect) correct++;
-    return { question: q.q, concept: q.concept, selectedOption: answers[i], correctOption: q.answer, isCorrect };
-  });
-  const score = Math.round((correct / quiz.questions.length) * 100);
-
-  document.getElementById('results-loading').style.display = 'flex';
-  document.getElementById('results-content').style.display = 'none';
-
-  try {
-    const result = await api('/student/quiz-result', 'POST', {
-      subject: quiz.subject, topic: quiz.topic,
-      score, totalQ: quiz.questions.length, correctQ: correct,
-      answers: answerPayload,
-    });
-    renderResults(result.aiAnalysis, quiz, score, correct);
-    // Reload user data in background
-    api('/student/me').then(d => { state.user = d.student; renderLessonsGrid(); loadProgressSection(); }).catch(()=>{});
-  } catch (err) {
-    notify('Could not save to database: ' + err.message, 'error');
-    // Still show results from local calculation
-    const localAnalysis = {
-      summary: `You scored ${score}% on ${quiz.topic}.`,
-      correctConcepts: [...new Set(answerPayload.filter(a=>a.isCorrect).map(a=>a.concept))],
-      weakConcepts:    [...new Set(answerPayload.filter(a=>!a.isCorrect).map(a=>a.concept))],
-      diagnosis: 'Results saved locally (backend unavailable).',
-      nextSteps: ['Review weak concepts', 'Practice more questions', 'Re-take the quiz'],
-    };
-    renderResults(localAnalysis, quiz, score, correct);
+  const quiz=state.currentQuiz; let correct=0;
+  const answers=quiz.questions.map((q,i)=>{const isCorrect=state.quizAnswers[i]===q.answer;if(isCorrect)correct++;return{question:q.question,concept:q.concept||q.topic||quiz.topic,selectedOption:state.quizAnswers[i],correctOption:q.answer,isCorrect};});
+  const score=Math.round((correct/quiz.questions.length)*100);
+  show('results-loading'); hide('results-content');
+  document.getElementById('results-status').textContent='Saving to MongoDB + phi3 gap detection…';
+  try{
+    const{aiAnalysis}=await api('/student/quiz-result','POST',{subject:quiz.subject,topic:quiz.topic,score,totalQ:quiz.questions.length,correctQ:correct,answers,quizId:quiz._id});
+    renderResults(aiAnalysis,quiz,score,correct);
+    api('/student/me').then(d=>{state.user=d.student;renderLessonsGrid();loadProgress();}).catch(()=>{});
+  }catch(e){
+    notify('Could not save: '+e.message,'error');
+    renderResults({summary:`You scored ${score}%.`,correctConcepts:[],weakConcepts:[],diagnosis:'Backend unavailable.',nextSteps:['Restart backend','Re-take quiz']},quiz,score,correct);
   }
 }
 
-function renderResults(ai, quiz, score, correct) {
-  document.getElementById('results-loading').style.display = 'none';
-  const scoreColor = score>=80?'var(--accent)':score>=60?'var(--primary)':'var(--warn)';
-  document.getElementById('results-content').style.display = 'block';
-  document.getElementById('results-content').innerHTML = `
+function renderResults(ai,quiz,score,correct){
+  hide('results-loading'); show('results-content');
+  const sc=score>=80?'var(--accent)':score>=60?'var(--primary)':'var(--warn)';
+  document.getElementById('results-content').innerHTML=`
     <div class="card" style="text-align:center;margin-bottom:24px;padding:32px;">
-      <div style="font-family:var(--font-display);font-size:4rem;font-weight:800;color:${scoreColor};margin-bottom:8px;">${score}%</div>
+      <div style="font-family:var(--font-display);font-size:4rem;font-weight:800;color:${sc};margin-bottom:8px;">${score}%</div>
       <div style="font-size:1rem;color:var(--text-muted);">${quiz.subject} · ${quiz.topic} · ${correct}/${quiz.questions.length} correct</div>
-      <p style="margin-top:12px;font-size:.9rem;color:var(--text-muted);max-width:500px;margin-left:auto;margin-right:auto;">${ai.summary}</p>
+      <div style="margin-top:8px;"><span class="ollama-badge">phi3 generated quiz</span></div>
+      <p style="margin-top:14px;font-size:.9rem;color:var(--text-muted);max-width:500px;margin-left:auto;margin-right:auto;">${ai.summary}</p>
     </div>
     <div class="grid-2" style="margin-bottom:20px;">
-      <div class="card"><div style="color:var(--accent);font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;">✓ Strong Concepts</div>
-        ${ai.correctConcepts?.length ? ai.correctConcepts.map(c=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:.88rem;"><span style="color:var(--accent);">●</span>${c}</div>`).join('') : '<div style="color:var(--text-muted);font-size:.85rem;">No concepts fully mastered yet.</div>'}
-      </div>
-      <div class="card"><div style="color:var(--danger);font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;">✗ Weak Concepts</div>
-        ${ai.weakConcepts?.length ? ai.weakConcepts.map(c=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:.88rem;"><span style="color:var(--danger);">●</span>${c}</div>`).join('') : '<div style="color:var(--text-muted);font-size:.85rem;">No gaps! 🎉</div>'}
-      </div>
+      <div class="card"><div style="color:var(--accent);font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;">✓ Strong Concepts</div>${(ai.correctConcepts||[]).length?(ai.correctConcepts||[]).map(c=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:.88rem;"><span style="color:var(--accent);">●</span>${c}</div>`).join(''):'<div style="color:var(--text-muted);font-size:.85rem;">Keep practising!</div>'}</div>
+      <div class="card"><div style="color:var(--danger);font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;">✗ Weak Concepts</div>${(ai.weakConcepts||[]).length?(ai.weakConcepts||[]).map(c=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:.88rem;"><span style="color:var(--danger);">●</span>${c}</div>`).join(''):'<div style="color:var(--text-muted);font-size:.85rem;">No major gaps! 🎉</div>'}</div>
     </div>
     <div class="ai-card" style="margin-bottom:20px;">
-      <div class="ai-label"><span class="pulse"></span> AI Diagnosis · Saved to Database</div>
+      <div class="ai-label"><span class="pulse"></span> phi3 Gap Diagnosis · Saved to MongoDB</div>
       <p style="font-size:.9rem;color:var(--text-muted);margin-bottom:12px;">${ai.diagnosis}</p>
-      <div style="font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:8px;">Next Steps:</div>
-      ${(ai.nextSteps||[]).map((s,i)=>`<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:6px;"><span style="color:var(--primary);font-family:var(--font-mono);font-size:.78rem;margin-top:2px;">${i+1}.</span><span style="font-size:.88rem;color:var(--text-muted);">${s}</span></div>`).join('')}
+      <div style="font-size:.82rem;font-weight:600;margin-bottom:8px;">Next Steps:</div>
+      ${(ai.nextSteps||[]).map((s,i)=>`<div style="display:flex;gap:10px;margin-bottom:6px;"><span style="color:var(--primary);font-family:var(--font-mono);font-size:.78rem;margin-top:2px;">${i+1}.</span><span style="font-size:.88rem;color:var(--text-muted);">${s}</span></div>`).join('')}
     </div>
     <div style="display:flex;gap:12px;flex-wrap:wrap;">
       <button class="btn btn-accent" onclick="goto('student-dashboard');showStudentSection('lessons')">📖 View AI Lessons</button>
@@ -1025,61 +667,34 @@ function renderResults(ai, quiz, score, correct) {
 // ════════════════════════════════════════════════════════
 //  LESSON VIEWER
 // ════════════════════════════════════════════════════════
-async function viewLesson(topic, subject) {
-  goto('lesson-view');
-  document.getElementById('lesson-page-loading').style.display = 'flex';
-  document.getElementById('lesson-page-content').style.display = 'none';
-  document.getElementById('lesson-loading-msg').textContent = `Generating AI lesson on "${topic}"…`;
-  // Track view
-  api('/student/lesson-viewed', 'POST', {}).catch(()=>{});
-  try {
-    const prompt = `You are EduInsight's AI tutor. Generate a personalized mini lesson for a student weak in: "${topic}" (${subject}).
-Respond ONLY as valid JSON (no markdown):
-{"title":"${topic}","tagline":"One compelling sentence","explanation":"HTML formatted 3-4 paragraph explanation using <h3><p><strong><ul><li>","keyFormula":"main formula or N/A","keyFormulaExplained":"plain English","commonMistakes":["m1","m2","m3"],"practiceQuestions":[{"q":"question","a":"answer + explanation"},{"q":"q","a":"a"},{"q":"q","a":"a"},{"q":"q","a":"a"},{"q":"q","a":"a"}]}`;
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1600, messages:[{role:'user',content:prompt}] })
-    });
-    const d = await res.json();
-    const lesson = JSON.parse(d.content.map(c=>c.text||'').join('').replace(/```json|```/g,'').trim());
-    renderLesson(lesson, topic, subject);
-  } catch(e) {
-    renderLesson({ title: topic, tagline: `Understanding ${topic} deeply.`, explanation: `<h3>What is ${topic}?</h3><p>This concept is fundamental to ${subject}. Review your class notes and attempt the practice questions below.</p>`, keyFormula:'N/A', keyFormulaExplained:'', commonMistakes:['Rushing through problems','Not drawing diagrams','Forgetting units'], practiceQuestions:[{q:`Explain ${topic} in your own words.`,a:`Think about the core definition and how it applies to real-world situations.`}] }, topic, subject);
+async function viewLesson(topic,subject){
+  goto('lesson-view'); show('lesson-page-loading'); hide('lesson-page-content');
+  document.getElementById('lesson-loading-msg').textContent=`Generating lesson on "${topic}" with phi3…`;
+  api('/student/lesson-viewed','POST',{}).catch(()=>{});
+  try{
+    const{lesson,cached}=await api('/lesson/generate','POST',{topic,subject});
+    if(cached)notify('Lesson loaded from MongoDB cache ✓','info'); else notify('Lesson generated by phi3 + saved to DB ✓','success');
+    renderLesson(lesson,topic,subject);
+  }catch(e){
+    hide('lesson-page-loading'); show('lesson-page-content');
+    document.getElementById('lesson-page-content').innerHTML=`<div class="card" style="text-align:center;padding:40px;"><div style="font-size:2rem;margin-bottom:12px;">❌</div><p style="color:var(--danger);">${e.message}</p><p style="color:var(--text-dim);font-size:.8rem;margin-top:8px;">Make sure Ollama is running</p><button class="btn btn-ghost" style="margin-top:16px;" onclick="goto('student-dashboard');showStudentSection('lessons')">← Back</button></div>`;
   }
 }
 
-function renderLesson(lesson, topic, subject) {
-  document.getElementById('lesson-page-loading').style.display = 'none';
-  document.getElementById('lesson-page-content').style.display = 'block';
-  document.getElementById('lesson-page-content').innerHTML = `
+function renderLesson(lesson,topic,subject){
+  hide('lesson-page-loading'); show('lesson-page-content');
+  document.getElementById('lesson-page-content').innerHTML=`
     <div style="margin-bottom:28px;">
-      <div style="font-size:.78rem;color:var(--text-muted);margin-bottom:4px;">${subject}</div>
-      <h1 style="font-family:var(--font-display);font-size:1.8rem;font-weight:800;margin-bottom:8px;">${lesson.title}</h1>
-      <p style="font-size:.95rem;color:var(--accent);">${lesson.tagline}</p>
+      <span class="ollama-badge">phi3 generated · MongoDB cached</span>
+      <div style="font-size:.78rem;color:var(--text-muted);margin-top:8px;margin-bottom:4px;">${subject}</div>
+      <h1 style="font-family:var(--font-display);font-size:1.8rem;font-weight:800;margin-bottom:8px;">${lesson.title||topic}</h1>
+      <p style="font-size:.95rem;color:var(--accent);">${lesson.tagline||''}</p>
     </div>
-    <div class="ai-card" style="margin-bottom:24px;">
-      <div class="ai-label"><span class="pulse"></span> AI-Generated Lesson</div>
-      <div class="lesson-content">${lesson.explanation}</div>
-    </div>
-    ${lesson.keyFormula && lesson.keyFormula !== 'N/A' ? `
-    <div class="card" style="margin-bottom:24px;border-color:var(--primary);">
-      <div style="font-size:.78rem;color:var(--primary);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Key Formula</div>
-      <div style="font-family:var(--font-mono);font-size:1.4rem;font-weight:700;margin-bottom:8px;">${lesson.keyFormula}</div>
-      <div style="font-size:.88rem;color:var(--text-muted);">${lesson.keyFormulaExplained}</div>
-    </div>` : ''}
-    <div class="card" style="margin-bottom:24px;">
-      <div style="font-size:.78rem;color:var(--danger);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;">⚠ Common Mistakes</div>
-      ${lesson.commonMistakes.map(m=>`<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;"><span style="color:var(--danger);margin-top:2px;">✗</span><span style="font-size:.88rem;color:var(--text-muted);">${m}</span></div>`).join('')}
-    </div>
-    <div style="margin-bottom:28px;">
-      <div style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;margin-bottom:16px;">📝 Practice Questions</div>
-      ${lesson.practiceQuestions.map((pq,i)=>`
-        <div class="practice-q">
-          <div class="q-num">Q${i+1}</div>
-          <div class="q-text">${pq.q}</div>
-          <button class="btn btn-ghost btn-sm" style="margin-top:10px;" onclick="toggleAns(this,'pans-${i}')">Show Answer</button>
-          <div class="q-ans" id="pans-${i}"><strong style="color:var(--accent);">Answer:</strong> ${pq.a}</div>
-        </div>`).join('')}
+    <div class="ai-card" style="margin-bottom:24px;"><div class="ai-label"><span class="pulse"></span> phi3 AI Lesson</div><div class="lesson-content">${lesson.explanation||''}</div></div>
+    ${lesson.keyFormula&&lesson.keyFormula!=='N/A'?`<div class="card" style="margin-bottom:24px;border-color:var(--primary);"><div style="font-size:.78rem;color:var(--primary);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Key Formula</div><div style="font-family:var(--font-mono);font-size:1.4rem;font-weight:700;margin-bottom:8px;">${lesson.keyFormula}</div><div style="font-size:.88rem;color:var(--text-muted);">${lesson.keyFormulaExplained||''}</div></div>`:''}
+    <div class="card" style="margin-bottom:24px;"><div style="font-size:.78rem;color:var(--danger);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;">⚠ Common Mistakes</div>${(lesson.commonMistakes||[]).map(m=>`<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;"><span style="color:var(--danger);margin-top:2px;">✗</span><span style="font-size:.88rem;color:var(--text-muted);">${m}</span></div>`).join('')}</div>
+    <div style="margin-bottom:28px;"><div style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;margin-bottom:16px;">📝 Practice Questions</div>
+      ${(lesson.practiceQuestions||[]).map((pq,i)=>`<div class="practice-q"><div class="q-num">Q${i+1}</div><div class="q-text">${pq.q}</div><button class="btn btn-ghost btn-sm" style="margin-top:10px;" onclick="toggleAns(this,'pans-${i}')">Show Answer</button><div class="q-ans" id="pans-${i}"><strong style="color:var(--accent);">Answer:</strong> ${pq.a}</div></div>`).join('')}
     </div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;">
       <button class="btn btn-primary" onclick="goto('student-dashboard');showStudentSection('quiz')">Take a Quiz →</button>
@@ -1087,60 +702,269 @@ function renderLesson(lesson, topic, subject) {
     </div>`;
 }
 
-function toggleAns(btn, id) {
-  const el = document.getElementById(id);
-  el.classList.toggle('show');
-  btn.textContent = el.classList.contains('show') ? 'Hide Answer' : 'Show Answer';
-}
+function toggleAns(btn,id){const el=document.getElementById(id);el.classList.toggle('show');btn.textContent=el.classList.contains('show')?'Hide Answer':'Show Answer';}
 
 // ════════════════════════════════════════════════════════
-//  UTILITIES
+//  TEACHER DASHBOARD
 // ════════════════════════════════════════════════════════
-function animateProgress() {
-  setTimeout(() => {
-    document.querySelectorAll('.progress-fill[data-width]').forEach(el => {
-      const w = el.getAttribute('data-width'); el.style.width = '0';
-      requestAnimationFrame(() => setTimeout(() => el.style.width = w + '%', 50));
-    });
-    document.querySelectorAll('.progress-fill:not([data-width])').forEach(el => {
-      const w = el.style.width; el.style.width = '0';
-      requestAnimationFrame(() => setTimeout(() => el.style.width = w, 50));
-    });
-  }, 100);
-}
-
-let notifTimer;
-function notify(msg, type = 'info') {
-  const el = document.getElementById('notification');
-  const icons = { success:'✓', error:'✗', info:'ℹ' };
-  el.className = type;
-  el.innerHTML = `<span style="font-size:1rem;">${icons[type]||'ℹ'}</span><span>${msg}</span>`;
-  el.classList.add('show');
-  clearTimeout(notifTimer);
-  notifTimer = setTimeout(() => el.classList.remove('show'), 3500);
-}
-
-function showError(id, msg) { const el = document.getElementById(id); if(el){el.textContent=msg;el.classList.add('show');} }
-function hideError(id)       { const el = document.getElementById(id); if(el) el.classList.remove('show'); }
-
-// ── Auto-restore session ──────────────────────────────
-if (state.token && state.role && state.user) {
-  if (state.role === 'student') {
-    document.getElementById('s-nav-name').textContent   = state.user.name;
-    document.getElementById('s-nav-avatar').textContent = state.user.name.charAt(0);
-    goto('student-dashboard');
-    showStudentSection('dashboard');
-    loadStudentDashboard();
-  } else if (state.role === 'teacher') {
-    document.getElementById('t-nav-name').textContent   = state.user.name;
-    document.getElementById('t-nav-avatar').textContent = state.user.name.split(' ').map(w=>w[0]).join('').slice(0,2);
-    goto('teacher-dashboard');
-    showTeacherSection('dashboard');
-    loadTeacherDashboard();
+async function loadTeacherDashboard(){
+  show('t-dash-loading'); hide('t-dash-content');
+  try{
+    const data=await api('/teacher/dashboard');
+    state.teacherData=data;
+    const{teacher,classStats,weakClassTopics,atRiskStudents}=data;
+    const weakRows=(weakClassTopics||[]).slice(0,6).map(t=>{
+      const pct=Math.round(100-t.correctPct), tg=pct>=50?'tag-danger':'tag-warn';
+      return `<div class="topic-item"><span class="topic-name">${t.topic} <span style="color:var(--text-dim);font-size:.75rem;">(${t.subject})</span></span><span class="tag ${tg}">${pct}% incorrect</span></div>`;
+    }).join('')||'<div style="color:var(--accent);font-size:.85rem;">No weak topics 🎉</div>';
+    const riskRows=(atRiskStudents||[]).slice(0,5).map(s=>`<div class="topic-item"><span class="topic-name">${s.name}</span><div style="display:flex;gap:8px;"><span class="tag tag-danger">${s.avg}%</span></div></div>`).join('')||'<div style="color:var(--accent);font-size:.85rem;">No at-risk students</div>';
+    document.getElementById('t-dash-content').innerHTML=`
+      <div style="margin-bottom:28px;">
+        <h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;">Class Overview</h1>
+        <p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">${teacher.subject} · ${teacher.grade} · ${teacher.section} · Live from MongoDB</p>
+      </div>
+      <div class="grid-4" style="margin-bottom:24px;">
+        <div class="stat-card"><div class="stat-label">Class Avg</div><div class="stat-value" style="color:var(--primary);">${classStats.classAvg}%</div><div class="stat-delta">All subjects</div></div>
+        <div class="stat-card"><div class="stat-label">Students</div><div class="stat-value">${classStats.totalStudents}</div><div class="stat-delta">${classStats.atRiskCount} at risk</div></div>
+        <div class="stat-card"><div class="stat-label">Quizzes</div><div class="stat-value">${classStats.quizzesGiven}</div></div>
+        <div class="stat-card"><div class="stat-label">Weak Topics</div><div class="stat-value" style="color:var(--warn);">${classStats.weakTopicsCount}</div></div>
+      </div>
+      <div class="grid-2" style="margin-bottom:20px;">
+        <div class="card"><div class="section-title" style="margin-bottom:14px;">Class Weak Topics</div>${weakRows}</div>
+        <div class="card"><div class="section-title" style="margin-bottom:14px;">At-Risk Students</div>${riskRows}<button class="btn btn-ghost btn-sm" style="margin-top:12px;" onclick="showTeacherSection('students')">View All →</button></div>
+      </div>
+      <div class="ai-card">
+        <div class="ai-label"><span class="pulse"></span> phi3 Insight Preview</div>
+        <p style="font-size:.9rem;color:var(--text-muted);margin-bottom:16px;">${weakClassTopics&&weakClassTopics.length?`${Math.round(100-weakClassTopics[0].correctPct)}% of students struggle with <strong style="color:var(--text);">${weakClassTopics[0].topic}</strong>. Generate full AI insights for teaching recommendations.`:'Your class is performing well across all tracked topics!'}</p>
+        <button class="btn btn-primary btn-sm" onclick="showTeacherSection('insights')">Generate AI Insights →</button>
+      </div>`;
+    hide('t-dash-loading'); show('t-dash-content'); animateProg();
+  }catch(e){
+    document.getElementById('t-dash-loading').innerHTML=`<p style="color:var(--danger);">Failed: ${e.message}<br><small>Is backend running on port 5000?</small></p>`;
   }
 }
 
-updateTopics();
+function showTeacherSection(id){
+  ['dashboard','generate','assignments','analytics','students','library','insights'].forEach(s=>{
+    const el=document.getElementById('t-section-'+s);
+    const bar=document.getElementById('tbar-'+s);
+    if(el) el.style.display=s===id?'block':'none';
+    if(bar) bar.classList.toggle('active',s===id);
+  });
+  const d=state.teacherData;
+  if(id==='analytics'&&d) renderTeacherAnalytics(d);
+  if(id==='students'&&d)  renderTeacherStudents(d);
+  if(id==='library')      loadQuizLibrary();
+  if(id==='insights'&&d)  renderInsightsSection(d);
+  if(id==='generate')     renderGenerateSection();
+  if(id==='assignments')  loadAssignments();
+}
+
+async function assignQuizToClass(quizId){
+  const btn=document.getElementById('assign-btn'); btn.disabled=true; btn.textContent='Assigning…';
+  const instructions=document.getElementById('assign-instructions')?.value||'';
+  const dueDate=document.getElementById('assign-due')?.value||null;
+  try{
+    const{alreadyAssigned}=await api('/teacher/assign-quiz','POST',{quizId,instructions,dueDate});
+    if(alreadyAssigned){notify('Quiz was already assigned to the class ✓','info');}
+    else{notify('Quiz assigned to class! Students can now attempt it 🎉','success');}
+    btn.textContent='✓ Assigned!';
+    setTimeout(()=>{showTeacherSection('assignments');},1200);
+  }catch(e){
+    notify('Assignment failed: '+e.message,'error');
+    btn.disabled=false; btn.textContent='📋 Assign to Class →';
+  }
+}
+
+async function loadAssignments(){
+  const c=document.getElementById('t-section-assignments');
+  c.innerHTML=`<div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;">Class Assignments</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">Manage quizzes assigned to your class · stored in MongoDB</p></div><div class="loader"><div class="spinner"></div><p>Loading assignments…</p></div>`;
+  try{
+    const{assignments}=await api('/teacher/assignments');
+    let html=`<div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;">Class Assignments</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">Manage quizzes assigned to your class · stored in MongoDB</p></div>`;
+    html+=`<button class="btn btn-accent btn-sm" style="margin-bottom:20px;" onclick="showTeacherSection('generate')">+ Generate &amp; Assign New Quiz</button>`;
+    if(!assignments||assignments.length===0){
+      html+=`<div class="ai-card" style="text-align:center;padding:48px;"><div style="font-size:2.5rem;margin-bottom:12px;">📭</div><div style="font-family:var(--font-display);font-weight:700;font-size:1.1rem;margin-bottom:8px;">No assignments yet</div><p style="color:var(--text-muted);">Generate a quiz and assign it to your class.</p></div>`;
+    } else {
+      html+=`<div class="card" style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Quiz Title</th><th>Subject · Topic</th><th>Due Date</th><th>Attempts</th><th>Status</th><th>Action</th></tr></thead><tbody>`;
+      html+=assignments.map(a=>{
+        const due=a.dueDate?new Date(a.dueDate).toLocaleDateString():'No due date';
+        const statusTag=a.isActive?'<span class="tag tag-success">Active</span>':'<span class="tag tag-danger">Closed</span>';
+        const completion=a.totalStudents>0?Math.round((a.attemptCount/a.totalStudents)*100):0;
+        const toggleLabel=a.isActive?'Close':'Reopen';
+        const toggleStyle=a.isActive?'btn-ghost':'btn-primary';
+        return `<tr>
+          <td style="font-weight:500;max-width:200px;">${a.title}</td>
+          <td><span style="font-size:.8rem;">${a.subject} · ${a.topic}</span></td>
+          <td style="color:var(--text-muted);font-size:.82rem;">${due}</td>
+          <td style="font-family:var(--font-mono);">${a.attemptCount}/${a.totalStudents} <span style="color:var(--text-dim);font-size:.75rem;">(${completion}%)</span></td>
+          <td>${statusTag}</td>
+          <td><button class="btn ${toggleStyle} btn-sm" onclick="toggleAssignment('${a._id}',${!a.isActive})">${toggleLabel}</button></td>
+        </tr>`;
+      }).join('');
+      html+=`</tbody></table></div><p style="color:var(--text-dim);font-size:.78rem;margin-top:12px;">Close an assignment to prevent new attempts.</p>`;
+    }
+    c.innerHTML=html;
+  }catch(e){c.innerHTML+=`<p style="color:var(--danger);">${e.message}</p>`;}
+}
+
+async function toggleAssignment(id, isActive){
+  try{
+    await api('/teacher/assignments/'+id,'PATCH',{isActive});
+    notify(isActive?'Assignment reopened ✓':'Assignment closed ✓','success');
+    loadAssignments();
+  }catch(e){notify('Failed: '+e.message,'error');}
+}
+
+function renderGenerateSection(){
+  document.getElementById('t-section-generate').innerHTML=`
+    <div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;">Generate Quiz with phi3</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">phi3 generates the questions. Saved to MongoDB automatically.</p></div>
+    <div class="card" style="max-width:620px;">
+      <div class="grid-2">
+        <div class="input-group"><label>Subject</label><select class="input-field" id="tg-subject"><option>Physics</option><option>Mathematics</option><option>Chemistry</option></select></div>
+        <div class="input-group"><label>Topic</label><input class="input-field" id="tg-topic" value="Laws of Motion" placeholder="e.g. Laws of Motion"></div>
+      </div>
+      <div class="grid-2">
+        <div class="input-group"><label>Difficulty</label><select class="input-field" id="tg-diff"><option value="easy">Easy</option><option value="medium" selected>Medium</option><option value="hard">Hard</option></select></div>
+        <div class="input-group"><label>Questions</label><select class="input-field" id="tg-count"><option value="5">5</option><option value="10" selected>10</option><option value="15">15</option></select></div>
+      </div>
+      <div class="input-group"><label>Context / Lecture Notes (optional)</label><textarea class="input-field" id="tg-notes" rows="3" placeholder="Paste lecture notes to guide phi3 generation…"></textarea></div>
+      <div class="ai-card" style="margin-bottom:16px;padding:14px 18px;"><div class="ai-label"><span class="pulse"></span> phi3 · Ollama</div><p style="font-size:.8rem;color:var(--text-muted);">Generation takes 30–90 seconds. Quiz saved to MongoDB and reused for 7 days.</p></div>
+      <button class="btn btn-accent btn-lg" id="tg-btn" onclick="teacherGenerateQuiz()">⚡ Generate Quiz with phi3</button>
+      <div id="tg-result" style="margin-top:16px;display:none;"></div>
+    </div>`;
+}
+
+async function teacherGenerateQuiz(){
+  const btn=document.getElementById('tg-btn'); btn.disabled=true; btn.textContent='🤖 phi3 generating…';
+  document.getElementById('tg-result').style.display='none';
+  try{
+    const body={subject:document.getElementById('tg-subject').value,topic:document.getElementById('tg-topic').value,difficulty:document.getElementById('tg-diff').value,count:parseInt(document.getElementById('tg-count').value),notes:document.getElementById('tg-notes').value};
+    const{quiz,cached}=await api('/quiz/generate','POST',body);
+    const el=document.getElementById('tg-result'); el.style.display='block';
+    el.innerHTML=`<div class="ai-card"><div class="ai-label"><span class="pulse"></span> ${cached?'Loaded from MongoDB cache':'Generated by phi3 + saved to MongoDB'}</div><div style="font-family:var(--font-display);font-weight:700;margin-bottom:8px;">${quiz.title}</div><div style="font-size:.85rem;color:var(--text-muted);margin-bottom:12px;">${quiz.questions.length} questions · ${quiz.difficulty} · ID: <span style="font-family:var(--font-mono);font-size:.8rem;">${quiz._id}</span></div><div style="font-size:.82rem;color:var(--text-dim);margin-bottom:14px;">Preview (first 3 questions):</div>${quiz.questions.slice(0,3).map((q,i)=>`<div style="padding:10px 12px;background:var(--surface3);border-radius:8px;margin-bottom:8px;font-size:.82rem;"><strong style="color:var(--text);">${i+1}.</strong> ${q.question}</div>`).join('')}
+      <div style="margin-top:16px;border-top:1px solid var(--border2);padding-top:16px;">
+        <div style="font-size:.82rem;color:var(--text-muted);margin-bottom:10px;">Assign this quiz to your class so students can attempt it:</div>
+        <div class="input-group" style="margin-bottom:10px;"><label>Instructions for students (optional)</label><textarea class="input-field" id="assign-instructions" rows="2" placeholder="e.g. Complete before Friday. Use textbook chapter 4."></textarea></div>
+        <div class="input-group" style="margin-bottom:12px;"><label>Due Date (optional)</label><input class="input-field" type="date" id="assign-due"></div>
+        <button class="btn btn-accent" id="assign-btn" onclick="assignQuizToClass('${quiz._id}')">📋 Assign to Class →</button>
+        <button class="btn btn-ghost btn-sm" style="margin-left:8px;" onclick="showTeacherSection('library')">View Library →</button>
+      </div>
+    </div>`;
+    notify(`Quiz saved to MongoDB: ${quiz.questions.length} questions`,'success');
+  }catch(e){
+    const el=document.getElementById('tg-result'); el.style.display='block';
+    el.innerHTML=`<div class="error-box show">${e.message}<br><small>Make sure Ollama is running: <code>ollama serve</code></small></div>`;
+  }finally{btn.disabled=false;btn.textContent='⚡ Generate Quiz with phi3';}
+}
+
+async function loadQuizLibrary(){
+  const c=document.getElementById('t-section-library');
+  c.innerHTML=`<div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;">Quiz & Lesson Library</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">All phi3-generated content stored in MongoDB.</p></div><div class="loader"><div class="spinner"></div><p>Loading from MongoDB…</p></div>`;
+  try{
+    const{quizzes,lessons}=await api('/teacher/generated-content');
+    c.innerHTML=`
+      <div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;">Quiz & Lesson Library</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">All phi3-generated content stored in MongoDB.</p></div>
+      <div style="font-family:var(--font-display);font-size:1rem;font-weight:700;margin-bottom:12px;">📝 Generated Quizzes (${quizzes.length})</div>
+      <div class="card" style="margin-bottom:24px;overflow-x:auto;"><table class="data-table"><thead><tr><th>Subject</th><th>Topic</th><th>Difficulty</th><th>Attempts</th><th>Avg Score</th><th>AI Model</th><th>Created</th></tr></thead><tbody>${quizzes.length?quizzes.map(q=>`<tr><td>${q.subject}</td><td>${q.topic}</td><td><span class="tag tag-info">${q.difficulty}</span></td><td style="font-family:var(--font-mono);">${q.timesAttempted}</td><td style="color:${q.avgScore>=80?'var(--accent)':q.avgScore>=60?'var(--primary)':'var(--warn)'};">${q.avgScore}%</td><td><span class="ollama-badge" style="font-size:.65rem;">${q.generatedBy}</span></td><td style="color:var(--text-muted);font-size:.8rem;">${new Date(q.createdAt).toLocaleDateString()}</td></tr>`).join(''):'<tr><td colspan="7" style="color:var(--text-dim);text-align:center;">No quizzes generated yet</td></tr>'}</tbody></table></div>
+      <div style="font-family:var(--font-display);font-size:1rem;font-weight:700;margin-bottom:12px;">📖 Generated Lessons (${lessons.length})</div>
+      <div class="card" style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Topic</th><th>Subject</th><th>Views</th><th>AI Model</th><th>Last Viewed</th><th>Created</th></tr></thead><tbody>${lessons.length?lessons.map(l=>`<tr><td>${l.topic}</td><td>${l.subject}</td><td style="font-family:var(--font-mono);">${l.viewCount}</td><td><span class="ollama-badge" style="font-size:.65rem;">${l.generatedBy}</span></td><td style="color:var(--text-muted);font-size:.8rem;">${l.lastViewed?new Date(l.lastViewed).toLocaleDateString():'—'}</td><td style="color:var(--text-muted);font-size:.8rem;">${new Date(l.createdAt).toLocaleDateString()}</td></tr>`).join(''):'<tr><td colspan="6" style="color:var(--text-dim);text-align:center;">No lessons generated yet</td></tr>'}</tbody></table></div>`;
+  }catch(e){c.innerHTML+=`<p style="color:var(--danger);">${e.message}</p>`;}
+}
+
+function renderTeacherAnalytics(data){
+  const all=[...(data.weakClassTopics||[]),...(data.strongClassTopics||[])].sort((a,b)=>b.correctPct-a.correctPct);
+  const rows=all.map(t=>{
+    const cl=t.correctPct>=80?'progress-green':t.correctPct>=60?'progress-blue':'progress-warn';
+    const tc=t.correctPct>=80?'var(--accent)':t.correctPct>=60?'var(--primary)':'var(--danger)';
+    return `<div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:6px;"><span>${t.topic} <span style="color:var(--text-dim);font-size:.75rem;">(${t.subject})</span></span><span style="font-family:var(--font-mono);color:${tc};">${t.correctPct}%</span></div><div class="progress-track" style="height:10px;margin-bottom:14px;"><div class="progress-fill ${cl}" style="width:${t.correctPct}%;height:10px;" data-w="${t.correctPct}"></div></div>`;
+  }).join('');
+  document.getElementById('t-section-analytics').innerHTML=`
+    <div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;">Class Analytics</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">Live from MongoDB · ${data.classStats.totalStudents} students</p></div>
+    <div class="card">${rows||'<p style="color:var(--text-muted);">No topic data yet — students need to take quizzes.</p>'}</div>`;
+  animateProg();
+}
+
+function renderTeacherStudents(data){
+  const rows=(data.students||[]).map(s=>{
+    const tc=s.avg>=80?'tag-success':s.avg>=65?'tag-info':s.avg>=50?'tag-warn':'tag-danger';
+    const status=s.avg>=80?'Strong':s.avg>=65?'Good':s.avg>=50?'Needs Work':'At Risk';
+    return `<tr><td>${s.name}</td><td style="font-family:var(--font-mono);font-size:.78rem;color:var(--text-muted);">${s.studentId}</td><td>${s.subjects?.physics||0}%</td><td>${s.subjects?.math||0}%</td><td>${s.subjects?.chemistry||0}%</td><td><strong>${s.avg}%</strong></td><td>${s.quizzesTaken}</td><td><span class="tag ${tc}">${status}</span></td></tr>`;
+  }).join('');
+  document.getElementById('t-section-students').innerHTML=`
+    <div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;">Student Performance</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">${data.students?.length||0} students · Live from MongoDB</p></div>
+    <div class="card" style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Name</th><th>ID</th><th>Physics</th><th>Math</th><th>Chemistry</th><th>Overall</th><th>Quizzes</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+
+function renderInsightsSection(data){
+  const weak=(data.weakClassTopics||[]).slice(0,3);
+  document.getElementById('t-section-insights').innerHTML=`
+    <div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;">AI Teaching Insights</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">phi3 recommendations based on your real class data.</p></div>
+    <button class="btn btn-accent" style="margin-bottom:24px;" id="gen-insights-btn" onclick="generateInsights()">⚡ Generate phi3 Insights</button>
+    ${weak.map((t,i)=>`<div class="ai-card" style="margin-bottom:14px;"><div class="ai-label"><span class="pulse"></span> Insight ${i+1} – ${t.topic}</div><p style="font-size:.88rem;color:var(--text-muted);">${Math.round(100-t.correctPct)}% of students are weak on <strong style="color:var(--text);">${t.topic}</strong> in ${t.subject}. Consider targeted revision.</p></div>`).join('')||'<div class="ai-card"><p style="color:var(--text-muted);">No weak topics detected — class is performing well!</p></div>'}
+    <div id="insights-ai-output" style="margin-top:20px;"></div>`;
+}
+
+async function generateInsights(){
+  const btn=document.getElementById('gen-insights-btn'); btn.disabled=true; btn.textContent='🤖 phi3 generating…';
+  const out=document.getElementById('insights-ai-output');
+  out.innerHTML=`<div class="loader"><div class="spinner"></div><p>phi3 is analyzing class data…</p><small>May take 30–60 seconds</small></div>`;
+  const d=state.teacherData;
+  try{
+    const info=(d.weakClassTopics||[]).map(t=>`${t.topic}(${t.subject}):${Math.round(100-t.correctPct)}% incorrect`).join('; ');
+    const res=await fetch('http://localhost:11434/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'phi3',stream:false,options:{temperature:0.3,num_predict:900},prompt:`You are a JSON API for educational insights. Class of ${d.classStats?.totalStudents} students, avg ${d.classStats?.classAvg}%. Weak topics: ${info||'none'}. At-risk students: ${d.classStats?.atRiskCount}.\nGive 3 concrete teaching insights. Return ONLY a JSON array, no extra text:\n[{"topic":"topic name","insight":"2-3 sentences","recommendation":"specific action","urgency":"high|medium|low"}]`})});
+    const raw=(await res.json()).response||'';
+    const insights=JSON.parse(raw.slice(raw.indexOf('['),raw.lastIndexOf(']')+1));
+    const colors={high:'var(--danger)',medium:'var(--warn)',low:'var(--accent)'};
+    out.innerHTML=`<div style="font-family:var(--font-display);font-size:1rem;font-weight:700;margin-bottom:16px;">✨ phi3 Insights (based on live DB data)</div>${insights.map((ins,i)=>`<div class="ai-card" style="margin-bottom:14px;"><div style="display:flex;justify-content:space-between;margin-bottom:8px;"><div class="ai-label"><span class="pulse"></span>${i+1}. ${ins.topic}</div><span style="font-size:.7rem;font-weight:700;color:${colors[ins.urgency]||'var(--text-muted)'};text-transform:uppercase;">${ins.urgency}</span></div><p style="font-size:.88rem;color:var(--text-muted);margin-bottom:10px;">${ins.insight}</p><div style="font-size:.82rem;background:rgba(96,165,250,.07);border-radius:6px;padding:10px 12px;"><strong>Recommendation:</strong> ${ins.recommendation}</div></div>`).join('')}`;
+    notify('phi3 insights generated!','success');
+  }catch(e){
+    out.innerHTML=`<div class="error-box show">phi3 insight generation failed: ${e.message}<br><small>Make sure Ollama is running and phi3 is pulled.</small></div>`;
+  }finally{btn.disabled=false;btn.textContent='⚡ Generate phi3 Insights';}
+}
+
+// ════════════════════════════════════════════════════════
+//  HEALTH CHECK + UTILS
+// ════════════════════════════════════════════════════════
+async function checkHealth(){
+  notify('Checking system…','info');
+  try{const h=await api('/health');notify(`Server: ${h.server} | MongoDB: ${h.mongo} | Ollama: ${h.ollama} (${h.model})`,h.ollama==='online'?'success':'error');}
+  catch(e){notify('Backend offline: '+e.message,'error');}
+}
+
+function animateProg(){
+  setTimeout(()=>document.querySelectorAll('[data-w]').forEach(el=>{const w=el.getAttribute('data-w');el.style.width='0';requestAnimationFrame(()=>setTimeout(()=>el.style.width=w+'%',60));}),100);
+}
+let notifT;
+function notify(msg,type='info'){
+  const el=document.getElementById('notification');
+  el.className=type;el.innerHTML=`<span>${{success:'✓',error:'✗',info:'ℹ'}[type]||'ℹ'}</span><span>${msg}</span>`;
+  el.classList.add('show');clearTimeout(notifT);notifT=setTimeout(()=>el.classList.remove('show'),4000);
+}
+function show(id){const el=document.getElementById(id);if(el)el.style.display='flex';}
+function hide(id){const el=document.getElementById(id);if(el)el.style.display='none';}
+function showErr(id,msg){const el=document.getElementById(id);if(el){el.textContent=msg;el.classList.add('show');}}
+function hideErr(id){const el=document.getElementById(id);if(el)el.classList.remove('show');}
+function setLoading(id,on,txt){const el=document.getElementById(id);if(el){el.disabled=on;el.textContent=txt;}}
+function escQ(s){return(s||'').replace(/'/g,"\\'");}
+
+// ── Auto restore session ──────────────────────────────────
+document.addEventListener('DOMContentLoaded',function(){
+  if(state.token&&state.role&&state.user){
+    if(state.role==='student'){
+      goto('student-dashboard');
+      const n=document.getElementById('s-nav-name'), a=document.getElementById('s-nav-avatar');
+      if(n)n.textContent=state.user.name; if(a)a.textContent=state.user.name.charAt(0);
+      showStudentSection('dashboard'); loadStudentDashboard();
+    } else if(state.role==='teacher'){
+      goto('teacher-dashboard');
+      const n=document.getElementById('t-nav-name'), a=document.getElementById('t-nav-avatar');
+      if(n)n.textContent=state.user.name;
+      if(a)a.textContent=state.user.name.split(' ').map(w=>w[0]).join('').slice(0,2);
+      showTeacherSection('dashboard'); loadTeacherDashboard();
+    }
+  }
+});
 </script>
 </body>
 </html>
