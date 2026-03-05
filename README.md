@@ -1,7 +1,7 @@
-# EduInsight – AI Learning Gap Detection System
+# SmartGap-AI Learning Detection System
 
 ## Overview
-EduInsight is an AI-powered educational platform that detects learning gaps in students and provides personalized explanations and practice questions to improve understanding.
+SmartGap-AI is an AI-powered educational platform that detects learning gaps in students and provides personalized explanations and practice questions to improve understanding.
 
 The platform supports two main users:
 - Students – take quizzes, receive AI-generated lessons, and track progress.
@@ -16,7 +16,7 @@ In traditional classrooms:
 - Students may memorize concepts without understanding them.
 - Weak topics are often discovered only during final exams.
 
-EduInsight solves this by using AI-driven concept analysis to detect topic-level weaknesses immediately after assessments.
+SmartGap-AI solves this by using AI-driven concept analysis to detect topic-level weaknesses immediately after assessments.
 
 ---
 
@@ -138,12 +138,9 @@ Frontend
 - HTML
 - CSS
 - JavaScript
-- React.js (optional)
 
 Backend
 - Node.js + Express
-or
-- Python Flask / FastAPI
 
 AI Layer
 - OpenAI API / LLM
@@ -160,7 +157,7 @@ Hosting
 
 ## Project Folder Structure
 
-EduInsight
+SmartGap-AI
 |
 |-- frontend
 |   |-- index.html
@@ -192,7 +189,7 @@ EduInsight
 
 ## Educational Impact
 
-EduInsight improves quality education by:
+SmartGap-AI improves quality education by:
 - Detecting learning gaps early
 - Providing personalized learning
 - Helping teachers focus on difficult topics
@@ -213,5 +210,5 @@ EduInsight improves quality education by:
 
 ## Conclusion
 
-EduInsight transforms traditional education into AI-driven personalized learning by identifying exactly what students do not understand and helping them improve with targeted lessons and practice.
+SmartGap-AI transforms traditional education into AI-driven personalized learning by identifying exactly what students do not understand and helping them improve with targeted lessons and practice.
 
