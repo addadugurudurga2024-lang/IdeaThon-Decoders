@@ -1,4 +1,4 @@
-// server.js — SmartGap_AI Backend (Ollama phi3 edition)
+// server.js — SmartGap_AI Backend (Ollama phi3 edition) 
 require('dotenv').config();
 const express  = require('express');
 const mongoose = require('mongoose');
