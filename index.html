@@ -1275,10 +1275,10 @@ async function assignQuizToClass(quizId){
 
 async function loadAssignments(){
   const c=document.getElementById('t-section-assignments');
-  c.innerHTML=`<div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;letter-spacing:-.02em;">Class Assignments</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">Manage quizzes assigned to your class · stored in MongoDB</p></div><div class="loader"><div class="spinner"></div><p>Loading assignments…</p></div>`;
+  c.innerHTML=`<div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;letter-spacing:-.02em;">Class Assignments</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">Manage quizzes assigned to your class. </p></div><div class="loader"><div class="spinner"></div><p>Loading assignments…</p></div>`;
   try{
     const{assignments}=await api('/teacher/assignments');
-    let html=`<div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;letter-spacing:-.02em;">Class Assignments</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">Manage quizzes assigned to your class · stored in MongoDB</p></div>`;
+    let html=`<div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;letter-spacing:-.02em;">Class Assignments</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">Manage quizzes assigned to your class. </p></div>`;
     html+=`<button class="btn btn-accent btn-sm" style="margin-bottom:20px;" onclick="showTeacherSection('generate')">+ Generate &amp; Assign New Quiz</button>`;
     if(!assignments||assignments.length===0){
       html+=`<div class="ai-card" style="text-align:center;padding:48px;"><div style="font-size:2.5rem;margin-bottom:12px;">📭</div><div style="font-family:var(--font-display);font-weight:700;font-size:1.1rem;margin-bottom:8px;">No assignments yet</div><p style="color:var(--text-muted);">Generate a quiz and assign it to your class.</p></div>`;
@@ -1315,19 +1315,19 @@ async function toggleAssignment(id, isActive){
 
 function renderGenerateSection(){
   document.getElementById('t-section-generate').innerHTML=`
-    <div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;letter-spacing:-.02em;">Generate Quiz with phi3</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">phi3 generates the questions. Saved to MongoDB automatically.</p></div>
+    <div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;letter-spacing:-.02em;">Generate Quiz</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;"></p></div>
     <div class="card" style="max-width:620px;">
       <div class="grid-2">
         <div class="input-group"><label>Subject</label><select class="input-field" id="tg-subject"><option>Physics</option><option>Mathematics</option><option>Chemistry</option></select></div>
-        <div class="input-group"><label>Topic</label><input class="input-field" id="tg-topic" value="Laws of Motion" placeholder="e.g. Laws of Motion"></div>
+        <div class="input-group"><label>Topic</label><input class="input-field" id="tg-topic" value="" placeholder="Enter Topics"></div>
       </div>
       <div class="grid-2">
         <div class="input-group"><label>Difficulty</label><select class="input-field" id="tg-diff"><option value="easy">Easy</option><option value="medium" selected>Medium</option><option value="hard">Hard</option></select></div>
         <div class="input-group"><label>Questions</label><select class="input-field" id="tg-count"><option value="5">5</option><option value="10" selected>10</option><option value="15">15</option></select></div>
       </div>
-      <div class="input-group"><label>Context / Lecture Notes (optional)</label><textarea class="input-field" id="tg-notes" rows="3" placeholder="Paste lecture notes to guide phi3 generation…"></textarea></div>
-      <div class="ai-card" style="margin-bottom:16px;padding:14px 18px;"><div class="ai-label"><span class="pulse"></span> phi3 · Ollama</div><p style="font-size:.8rem;color:var(--text-muted);">Generation takes 30–90 seconds. Quiz saved to MongoDB and reused for 7 days.</p></div>
-      <button class="btn btn-accent btn-lg" id="tg-btn" onclick="teacherGenerateQuiz()">⚡ Generate Quiz with phi3</button>
+      <div class="input-group"><label>Context / Lecture Notes (optional)</label><textarea class="input-field" id="tg-notes" rows="3" placeholder="Paste lecture notes or required topics(only text)."></textarea></div>
+      <div class="ai-card" style="margin-bottom:16px;padding:14px 18px;"><div class="ai-label"><span class="pulse"></span> phi3 · Ollama</div><p style="font-size:.8rem;color:var(--text-muted);">Generation takes 60–120 seconds. Quiz saved to MongoDB and reused for 7 days.</p></div>
+      <button class="btn btn-accent btn-lg" id="tg-btn" onclick="teacherGenerateQuiz()">⚡ Generate Quiz</button>
       <div id="tg-result" style="margin-top:16px;display:none;"></div>
     </div>`;
 }
@@ -1339,7 +1339,7 @@ async function teacherGenerateQuiz(){
     const body={subject:document.getElementById('tg-subject').value,topic:document.getElementById('tg-topic').value,difficulty:document.getElementById('tg-diff').value,count:parseInt(document.getElementById('tg-count').value),notes:document.getElementById('tg-notes').value};
     const{quiz,cached}=await api('/quiz/generate','POST',body);
     const el=document.getElementById('tg-result'); el.style.display='block';
-    el.innerHTML=`<div class="ai-card"><div class="ai-label"><span class="pulse"></span> ${cached?'Loaded from MongoDB cache':'Generated by phi3 + saved to MongoDB'}</div><div style="font-family:var(--font-display);font-weight:700;margin-bottom:8px;">${quiz.title}</div><div style="font-size:.85rem;color:var(--text-muted);margin-bottom:12px;">${quiz.questions.length} questions · ${quiz.difficulty} · ID: <span style="font-family:var(--font-mono);font-size:.8rem;">${quiz._id}</span></div><div style="font-size:.82rem;color:var(--text-dim);margin-bottom:14px;">Preview (first 3 questions):</div>${quiz.questions.slice(0,3).map((q,i)=>`<div style="padding:10px 12px;background:var(--surface3);border-radius:8px;margin-bottom:8px;font-size:.82rem;"><strong style="color:var(--text);">${i+1}.</strong> ${q.question}</div>`).join('')}
+    el.innerHTML=`<div class="ai-card"><div class="ai-label"><span class="pulse"></span> ${cached?'Loaded from MongoDB cache':'Generated by phi3 '}</div><div style="font-family:var(--font-display);font-weight:700;margin-bottom:8px;">${quiz.title}</div><div style="font-size:.85rem;color:var(--text-muted);margin-bottom:12px;">${quiz.questions.length} questions · ${quiz.difficulty} · ID: <span style="font-family:var(--font-mono);font-size:.8rem;">${quiz._id}</span></div><div style="font-size:.82rem;color:var(--text-dim);margin-bottom:14px;">Preview (first 3 questions):</div>${quiz.questions.slice(0,3).map((q,i)=>`<div style="padding:10px 12px;background:var(--surface3);border-radius:8px;margin-bottom:8px;font-size:.82rem;"><strong style="color:var(--text);">${i+1}.</strong> ${q.question}</div>`).join('')}
       <div style="margin-top:16px;border-top:1px solid var(--border2);padding-top:16px;">
         <div style="font-size:.82rem;color:var(--text-muted);margin-bottom:10px;">Assign this quiz to your class so students can attempt it:</div>
         <div class="input-group" style="margin-bottom:10px;"><label>Instructions for students (optional)</label><textarea class="input-field" id="assign-instructions" rows="2" placeholder="e.g. Complete before Friday. Use textbook chapter 4."></textarea></div>
@@ -1357,11 +1357,11 @@ async function teacherGenerateQuiz(){
 
 async function loadQuizLibrary(){
   const c=document.getElementById('t-section-library');
-  c.innerHTML=`<div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;letter-spacing:-.02em;">Quiz & Lesson Library</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">All phi3-generated content stored in MongoDB.</p></div><div class="loader"><div class="spinner"></div><p>Loading from MongoDB…</p></div>`;
+  c.innerHTML=`<div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;letter-spacing:-.02em;">Quiz & Lesson Library</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;"></p></div><div class="loader"><div class="spinner"></div><p>Loading from MongoDB…</p></div>`;
   try{
     const{quizzes,lessons}=await api('/teacher/generated-content');
     c.innerHTML=`
-      <div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;letter-spacing:-.02em;">Quiz & Lesson Library</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">All phi3-generated content stored in MongoDB.</p></div>
+      <div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;letter-spacing:-.02em;">Quiz & Lesson Library</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;"></p></div>
       <div style="font-family:var(--font-display);font-size:1rem;font-weight:700;margin-bottom:12px;">📝 Generated Quizzes (${quizzes.length})</div>
       <div class="card" style="margin-bottom:24px;overflow-x:auto;"><table class="data-table"><thead><tr><th>Subject</th><th>Topic</th><th>Difficulty</th><th>Attempts</th><th>Avg Score</th><th>AI Model</th><th>Created</th></tr></thead><tbody>${quizzes.length?quizzes.map(q=>`<tr><td>${q.subject}</td><td>${q.topic}</td><td><span class="tag tag-info">${q.difficulty}</span></td><td style="font-family:var(--font-mono);">${q.timesAttempted}</td><td style="color:${q.avgScore>=80?'var(--accent)':q.avgScore>=60?'var(--primary)':'var(--warn)'};">${q.avgScore}%</td><td><span class="ollama-badge" style="font-size:.65rem;">${q.generatedBy}</span></td><td style="color:var(--text-muted);font-size:.8rem;">${new Date(q.createdAt).toLocaleDateString()}</td></tr>`).join(''):'<tr><td colspan="7" style="color:var(--text-dim);text-align:center;">No quizzes generated yet</td></tr>'}</tbody></table></div>
       <div style="font-family:var(--font-display);font-size:1rem;font-weight:700;margin-bottom:12px;">📖 Generated Lessons (${lessons.length})</div>
@@ -1377,7 +1377,7 @@ function renderTeacherAnalytics(data){
     return `<div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:6px;"><span>${t.topic} <span style="color:var(--text-dim);font-size:.75rem;">(${t.subject})</span></span><span style="font-family:var(--font-mono);color:${tc};">${t.correctPct}%</span></div><div class="progress-track" style="height:10px;margin-bottom:14px;"><div class="progress-fill ${cl}" style="width:${t.correctPct}%;height:10px;" data-w="${t.correctPct}"></div></div>`;
   }).join('');
   document.getElementById('t-section-analytics').innerHTML=`
-    <div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;letter-spacing:-.02em;">Class Analytics</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">Live from MongoDB · ${data.classStats.totalStudents} students</p></div>
+    <div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;letter-spacing:-.02em;">Class Analytics</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">· ${data.classStats.totalStudents} students</p></div>
     <div class="card">${rows||'<p style="color:var(--text-muted);">No topic data yet — students need to take quizzes.</p>'}</div>`;
   animateProg();
 }
@@ -1389,7 +1389,7 @@ function renderTeacherStudents(data){
     return `<tr><td>${s.name}</td><td style="font-family:var(--font-mono);font-size:.78rem;color:var(--text-muted);">${s.studentId}</td><td>${s.subjects?.physics||0}%</td><td>${s.subjects?.math||0}%</td><td>${s.subjects?.chemistry||0}%</td><td><strong>${s.avg}%</strong></td><td>${s.quizzesTaken}</td><td><span class="tag ${tc}">${status}</span></td></tr>`;
   }).join('');
   document.getElementById('t-section-students').innerHTML=`
-    <div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;letter-spacing:-.02em;">Student Performance</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">${data.students?.length||0} students · Live from MongoDB</p></div>
+    <div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;letter-spacing:-.02em;">Student Performance</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">${data.students?.length||0} students · </p></div>
     <div class="card" style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Name</th><th>ID</th><th>Physics</th><th>Math</th><th>Chemistry</th><th>Overall</th><th>Quizzes</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 
@@ -1397,7 +1397,7 @@ function renderInsightsSection(data){
   const weak=(data.weakClassTopics||[]).slice(0,3);
   document.getElementById('t-section-insights').innerHTML=`
     <div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;letter-spacing:-.02em;">AI Teaching Insights</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">phi3 recommendations based on your real class data.</p></div>
-    <button class="btn btn-accent" style="margin-bottom:24px;" id="gen-insights-btn" onclick="generateInsights()">⚡ Generate phi3 Insights</button>
+    <button class="btn btn-accent" style="margin-bottom:24px;" id="gen-insights-btn" onclick="generateInsights()">⚡ Generate Insights</button>
     ${weak.map((t,i)=>`<div class="ai-card" style="margin-bottom:14px;"><div class="ai-label"><span class="pulse"></span> Insight ${i+1} – ${t.topic}</div><p style="font-size:.88rem;color:var(--text-muted);">${Math.round(100-t.correctPct)}% of students are weak on <strong style="color:var(--text);">${t.topic}</strong> in ${t.subject}. Consider targeted revision.</p></div>`).join('')||'<div class="ai-card"><p style="color:var(--text-muted);">No weak topics detected — class is performing well!</p></div>'}
     <div id="insights-ai-output" style="margin-top:20px;"></div>`;
 }
