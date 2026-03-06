@@ -10,9 +10,9 @@ const studentSchema = new mongoose.Schema({
   grade:     { type: String, default: 'Grade 10' },
   section:   { type: String, default: 'Section A' },
   subjects: {
-    DBMS:   { type: Number, default: 0 },
-    CVLA:      { type: Number, default: 0 },
-    JAVA: { type: Number, default: 0 },
+    physics:   { type: Number, default: 0 },
+    math:      { type: Number, default: 0 },
+    chemistry: { type: Number, default: 0 },
   },
   topicScores: [{
     subject:  String,
