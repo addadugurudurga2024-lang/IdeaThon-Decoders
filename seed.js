@@ -22,27 +22,23 @@ async function seed() {
   // ── CREATE TEACHER ─────────────────────────────────────
   // MUST use .create() not insertMany — so bcrypt pre('save') hook runs
   const teacher = await Teacher.create({
-    name:      'Mrs. Sarah Johnson',
+    name:      'Mr.Prem',
     teacherId: 'TCH-001',
-    email:     'sarah.johnson@school.edu',
-    password:  'teacher123',
-    subject:   'Physics',
-    grade:     'Grade 10',
-    section:   'Section A',
+    email:     'prem@gmail.com',
+    password:  'prem123',
+    subject:   'Dedicated',
+    grade:     'Grade 1',
+    section:   'Scope',
   });
-  console.log('👩‍🏫 Teacher created:', teacher.name, '| password hashed:', teacher.password.startsWith('$2'));
+  console.log('Teacher created:', teacher.name, '| password hashed:', teacher.password.startsWith('$2'));
 
-  // ── CREATE STUDENTS ────────────────────────────────────
-  // IMPORTANT: Use Student.create() one at a time — NOT insertMany()
-  // insertMany() SKIPS Mongoose middleware, so passwords are NOT hashed
-  // Student.create() triggers pre('save') → bcrypt hashes the password
   const studentData = [
-    { name: 'Abhishek',     email: 'alex@gmail.com',   studentId: 'STU-01',  password: 'pass12'  },
-    { name: 'Ravi Kumar',   email: 'ravi@school.edu',  studentId: 'STU-002', password: 'pass123' },
-    { name: 'Meera Patel',  email: 'meera@school.edu', studentId: 'STU-003', password: 'pass123' },
-    { name: 'Priya Sharma', email: 'priya@school.edu', studentId: 'STU-004', password: 'pass123' },
-    { name: 'Sara Ahmed',   email: 'sara@school.edu',  studentId: 'STU-005', password: 'pass123' },
-    { name: 'Chen Wei',     email: 'chen@school.edu',  studentId: 'STU-006', password: 'pass123' },
+    { name: 'A Abhishek',     email: 'abhishek@gmail.com',   studentId: '24BRS1362',  password: 'pass12'  },
+    { name: 'Rohith K',   email: 'rohith@gmail.com',  studentId: '24BRS1304', password: 'pass123' },
+    { name: 'Meera',  email: 'meera@gmail.com', studentId: '24BYB1169', password: 'pass123' },
+    { name: 'Priya', email: 'priya@gmail.com', studentId: '24BCE1352', password: 'pass123' },
+    { name: 'Rohith S',   email: 'rohith.s@gmail.com',  studentId: '24BCE5245', password: 'pass123' },
+    { name: 'Chetan',     email: 'chetan@gmail.com',  studentId: '24BRS1301', password: 'pass123' },
   ];
 
   const students = [];
@@ -62,7 +58,7 @@ async function seed() {
     notes:         "Newton's Laws: First law - inertia. Second law - F=ma. Third law - action-reaction pairs. Free body diagrams show all forces acting on an object.",
     questionCount: 10,
   });
-  console.log('📤 Teacher quiz upload created\n');
+  console.log('Teacher quiz upload created\n');
 
   console.log('✅ SEED COMPLETE!\n');
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
