@@ -1,4 +1,4 @@
-<!-- Final Frontend part -->
+<!-- Final Frontend:  -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,9 +61,6 @@ body::before{
 .page.active{display:block;animation:pgIn .4s cubic-bezier(.22,1,.36,1)}
 @keyframes pgIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 
-/* ══════════════════════════════════════════════
-   NAV
-══════════════════════════════════════════════ */
 nav{
   position:sticky;top:0;z-index:100;
   display:flex;align-items:center;justify-content:space-between;
@@ -99,9 +96,6 @@ nav::after{
   box-shadow:0 0 12px var(--glow-green);
 }
 
-/* ══════════════════════════════════════════════
-   BUTTONS
-══════════════════════════════════════════════ */
 .btn{
   display:inline-flex;align-items:center;gap:7px;
   padding:10px 20px;border-radius:8px;border:none;
@@ -142,9 +136,6 @@ nav::after{
 .btn-lg{padding:14px 32px;font-size:1rem}
 .btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important;pointer-events:none}
 
-/* ══════════════════════════════════════════════
-   CARDS
-══════════════════════════════════════════════ */
 .card{
   background:var(--surface);
   border:1px solid var(--border);
@@ -209,9 +200,6 @@ textarea.input-field{resize:vertical}
 .loader p{color:var(--text-muted);font-size:.88rem}
 .loader small{color:var(--text-dim);font-size:.76rem}
 
-/* ══════════════════════════════════════════════
-   STAT CARDS — FIXED: padding tightened, font clamps, no overflow
-══════════════════════════════════════════════ */
 .stat-card{
   background:var(--surface);
   border:1px solid var(--border);
@@ -324,9 +312,7 @@ textarea.input-field{resize:vertical}
 .quiz-dot.done{background:var(--primary)}
 .quiz-dot.current{background:var(--accent);box-shadow:0 0 8px var(--accent)}
 
-/* ══════════════════════════════════════════════
-   GRIDS — FIXED: minmax(0,1fr) prevents blowout
-══════════════════════════════════════════════ */
+/*  GRIDS — FIXED: minmax(0,1fr) prevents blowout */
 .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
@@ -344,9 +330,7 @@ textarea.input-field{resize:vertical}
   nav{padding:0 16px}
 }
 
-/* ══════════════════════════════════════════════
-   APP LAYOUT — FIXED: sidebar narrower, main gets breathing room
-══════════════════════════════════════════════ */
+
 .app-layout{display:flex;min-height:calc(100vh - 60px)}
 
 .sidebar{
@@ -386,7 +370,7 @@ textarea.input-field{resize:vertical}
   font-family:var(--font-display);
 }
 
-/* FIXED: main-content gets full remaining width, no overflow */
+/* */
 .main-content{
   flex:1;
   padding:28px 28px;
@@ -396,9 +380,6 @@ textarea.input-field{resize:vertical}
   max-width:100%;
 }
 
-/* ══════════════════════════════════════════════
-   NOTIFICATION TOAST
-══════════════════════════════════════════════ */
 #notification{
   position:fixed;top:72px;right:20px;z-index:9999;
   background:var(--surface2);
@@ -619,7 +600,7 @@ code{font-family:var(--font-mono);font-size:.85em;background:var(--surface3);pad
 
 <div id="notification"></div>
 
-<!-- ═══════════ LANDING ═══════════ -->
+<!-- LANDING  -->
 <div id="page-landing" class="page active">
   <nav>
     <div class="nav-logo" onclick="goto('landing')"><div class="dot"></div>SmartGap_AI</div>
@@ -649,7 +630,7 @@ code{font-family:var(--font-mono);font-size:.85em;background:var(--surface3);pad
   <div class="landing-footer">© 2025 SmartGap_AI · Ollama phi3 + MongoDB + Express</div>
 </div>
 
-<!-- ═══════════ ROLE SELECT ═══════════ -->
+<!--ROLE SELECT -->
 <div id="page-role-select" class="page">
   <nav><div class="nav-logo" onclick="goto('landing')"><div class="dot"></div>SmartGap_AI</div><button class="btn btn-ghost btn-sm" onclick="goto('landing')">← Back</button></nav>
   <div style="display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 60px);flex-direction:column;gap:36px;padding:40px 20px;position:relative;">
@@ -672,7 +653,7 @@ code{font-family:var(--font-mono);font-size:.85em;background:var(--surface3);pad
   </div>
 </div>
 
-<!-- ═══════════ STUDENT LOGIN ═══════════ -->
+<!-- STUDENT LOGIN -->
 <div id="page-student-login" class="page">
   <nav><div class="nav-logo" onclick="goto('landing')"><div class="dot"></div>SmartGap_AI</div><button class="btn btn-ghost btn-sm" onclick="goto('role-select')">← Back</button></nav>
   <div class="auth-wrap">
@@ -699,7 +680,7 @@ code{font-family:var(--font-mono);font-size:.85em;background:var(--surface3);pad
   </div>
 </div>
 
-<!-- ═══════════ TEACHER LOGIN ═══════════ -->
+<!-- TEACHER LOGIN-->
 <div id="page-teacher-login" class="page">
   <nav><div class="nav-logo" onclick="goto('landing')"><div class="dot"></div>SmartGap_AI</div><button class="btn btn-ghost btn-sm" onclick="goto('role-select')">← Back</button></nav>
   <div class="auth-wrap">
@@ -726,7 +707,7 @@ code{font-family:var(--font-mono);font-size:.85em;background:var(--surface3);pad
   </div>
 </div>
 
-<!-- ═══════════ STUDENT DASHBOARD ═══════════ -->
+<!--STUDENT DASHBOARD  -->
 <div id="page-student-dashboard" class="page">
   <nav>
     <div class="nav-logo" onclick="goto('landing')"><div class="dot"></div>SmartGap_AI</div>
@@ -767,7 +748,7 @@ code{font-family:var(--font-mono);font-size:.85em;background:var(--surface3);pad
   </div>
 </div>
 
-<!-- ═══════════ QUIZ RESULTS ═══════════ -->
+<!-- QUIZ RESULTS-->
 <div id="page-quiz-results" class="page">
   <nav><div class="nav-logo" onclick="goto('landing')"><div class="dot"></div>SmartGap_AI</div><div class="nav-actions"><button class="btn btn-ghost btn-sm" onclick="goto('student-dashboard')">← Dashboard</button></div></nav>
   <div style="max-width:780px;margin:0 auto;padding:44px 24px;">
@@ -781,7 +762,7 @@ code{font-family:var(--font-mono);font-size:.85em;background:var(--surface3);pad
   </div>
 </div>
 
-<!-- ═══════════ LESSON PAGE ═══════════ -->
+<!-- ════LESSON PAGE ══-->
 <div id="page-lesson-view" class="page">
   <nav><div class="nav-logo" onclick="goto('landing')"><div class="dot"></div>SmartGap_AI</div><div class="nav-actions"><button class="btn btn-ghost btn-sm" onclick="goto('student-dashboard');showStudentSection('lessons')">← Lessons</button></div></nav>
   <div style="max-width:780px;margin:0 auto;padding:44px 24px;">
@@ -790,7 +771,7 @@ code{font-family:var(--font-mono);font-size:.85em;background:var(--surface3);pad
   </div>
 </div>
 
-<!-- ═══════════ TEACHER DASHBOARD ═══════════ -->
+<!-- ═════TEACHER DASHBOARD ══-->
 <div id="page-teacher-dashboard" class="page">
   <nav>
     <div class="nav-logo" onclick="goto('landing')"><div class="dot"></div>SmartGap_AI</div>
@@ -829,7 +810,6 @@ code{font-family:var(--font-mono);font-size:.85em;background:var(--surface3);pad
 </div>
 
 <script>
-// ════════════════════════════════════════════════════════
 const API = 'http://localhost:5000/api';
 let state = {
   token: localStorage.getItem('smartgap_token'),
@@ -854,7 +834,7 @@ function goto(pageId) {
   window.scrollTo(0,0);
 }
 
-// ── AUTH ─────────────────────────────────────────────────
+// ── AUTH ─────
 async function studentLogin() {
   const emailVal = document.getElementById('s-email').value.trim();
   const pass     = document.getElementById('s-pass').value;
@@ -910,9 +890,7 @@ function saveSession(token, role, user) {
   localStorage.setItem('smartgap_user',  JSON.stringify(user));
 }
 
-// ════════════════════════════════════════════════════════
 //  STUDENT DASHBOARD
-// ════════════════════════════════════════════════════════
 async function loadStudentDashboard() {
   show('s-dash-loading'); hide('s-dash-content');
   try {
@@ -1023,9 +1001,7 @@ function showStudentSection(id){
   if(id==='quiz') renderQuizSelector();
 }
 
-// ════════════════════════════════════════════════════════
 //  QUIZ FLOW
-// ════════════════════════════════════════════════════════
 function renderQuizSelector(){
   document.getElementById('quiz-selector').innerHTML=`
     <div style="margin-bottom:28px;"><h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;letter-spacing:-.02em;">Assigned Quizzes</h1><p style="color:var(--text-muted);margin-top:4px;font-size:.9rem;">Quizzes assigned by your teacher ·</p></div>
@@ -1161,9 +1137,7 @@ function renderResults(ai,quiz,score,correct){
     </div>`;
 }
 
-// ════════════════════════════════════════════════════════
 //  LESSON VIEWER
-// ════════════════════════════════════════════════════════
 async function viewLesson(topic,subject){
   goto('lesson-view'); show('lesson-page-loading'); hide('lesson-page-content');
   document.getElementById('lesson-loading-msg').textContent=`Generating lesson on "${topic}" with phi3…`;
@@ -1420,9 +1394,7 @@ async function generateInsights(){
   }finally{btn.disabled=false;btn.textContent='⚡ Generate phi3 Insights';}
 }
 
-// ════════════════════════════════════════════════════════
 //  HEALTH CHECK + UTILS
-// ════════════════════════════════════════════════════════
 async function checkHealth(){
   notify('Checking system…','info');
   try{const h=await api('/health');notify(`Server: ${h.server} | MongoDB: ${h.mongo} | Ollama: ${h.ollama} (${h.model})`,h.ollama==='online'?'success':'error');}
